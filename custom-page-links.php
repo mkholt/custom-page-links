@@ -26,3 +26,24 @@ License: GPL2
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+namespace dk\mholt\CustomPageLinks;
+
+class CustomPageLinks
+{
+	/**
+	 * @return CustomPageLinks
+	 */
+	public static function initialize()
+	{
+		$cpl = new CustomPageLinks();
+
+		return $cpl;
+	}
+
+	private function __construct()
+	{
+
+	}
+}
+
+CustomPageLinks::initialize();
