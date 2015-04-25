@@ -23,11 +23,20 @@ if (!empty($meta))
 			?>
 			<li>
 				<?= $link->toString() ?>
-				<?php submit_button(__('Delete', $textDomain), 'delete', "cpl_delete_{$link->getId()}", false,
+				[ <a href="<?= add_query_arg(
 					[
-						'data-post_id' => $post->ID,
-						'data-link_id' => $link->getId()
-					]) ?>
+						"action" => "cpl_edit_link",
+						"post_id" => $post->ID,
+						"link_id" => $link->getId()
+					], admin_url('admin-ajax.php')) ?>" class="thickbox"
+					title="<?= __('Edit link', $textDomain) ?>"><?= __('Edit', $textDomain) ?></a> ]
+				[ <a href="<?= add_query_arg(
+					[
+						"action" => "cpl_remove_link",
+						"post_id" => $post->ID,
+						"link_id" => $link->getId()
+					], admin_url('admin-ajax.php')) ?>" class="thickbox"
+					title="<?= __('Delete link', $textDomain) ?>"><?= __('Delete', $textDomain) ?></a> ]
 			</li>
 			<?php
 		}

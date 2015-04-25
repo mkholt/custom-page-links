@@ -31,6 +31,26 @@ class Storage {
 	}
 
 	/**
+	 * @param int $postId
+	 * @param int $linkId
+	 *
+	 * @throws \Exception
+	 *
+	 * @return Link
+	 */
+	public static function getLink($postId, $linkId)
+	{
+		$links = self::getLinks($postId);
+
+		if (array_key_exists($linkId, $links))
+		{
+			return $links[$linkId];
+		}
+
+		throw new \Exception(sprintf("Invalid link %s for post %s", $linkId, $postId));
+	}
+
+	/**
 	 * Add a link to the given post
 	 *
 	 * @param int $id

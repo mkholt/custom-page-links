@@ -15,6 +15,8 @@ use dk\mholt\CustomPageLinks\Storage;
 class Metabox {
 	public static function addMetaBox(\WP_Post $post)
 	{
+		add_thickbox();
+
 		$meta = Storage::getLinks($post->ID);
 		$textDomain = CustomPageLinks::TEXT_DOMAIN;
 
@@ -40,7 +42,17 @@ class Metabox {
 
 	public static function removeLink()
 	{
-		echo json_encode(["status" => Storage::removeLink($_REQUEST['post_id'], $_REQUEST['link_id'])]);
+		$postId = $_REQUEST['post_id'];
+		$linkId = $_REQUEST['link_id'];
+
+		if (!empty($_REQUEST['confirm'])) {
+			echo json_encode( [ "status" => Storage::removeLink($postId, $linkId) ] );
+			exit;
+		}
+
+		$link = Storage::getLink($postId, $linkId);
+		$textDomain = CustomPageLinks::TEXT_DOMAIN;
+		include(sprintf("%s/templates/remove.php", CustomPageLinks::$PLUGIN_PATH));
 		exit;
 	}
 } 
