@@ -56,9 +56,6 @@ class CustomPageLinks
 
 		add_action('admin_enqueue_scripts', [$this, 'addScripts']);
 
-		require_once('Autoload.php');
-		Autoload::register();
-
 		Metabox::addAction();
 	}
 
@@ -156,8 +153,13 @@ class CustomPageLinks
 	}
 }
 
+require_once('Autoload.php');
+Autoload::register();
+
 if (is_admin()) {
 	$cpl = CustomPageLinks::initialize();
 	add_action('load-page.php', [$cpl, 'addHooks']);
 	add_action('load-page-new.php', [$cpl, 'addHooks']);
 }
+
+Shortcode::addShortcode();
