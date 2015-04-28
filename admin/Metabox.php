@@ -19,6 +19,7 @@ class Metabox {
 		add_thickbox();
 
 		ViewController::loadView('metabox', [
+			'post' => $post,
 			'meta' => Storage::getLinks($post->ID),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
