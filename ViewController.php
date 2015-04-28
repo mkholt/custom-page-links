@@ -42,7 +42,7 @@ class ViewController {
 		header("Content-type: application/json");
 
 		echo json_encode($ret);
-		exit;
+		wp_die();
 	}
 
 	public function __construct($view = null, array $vars = [])
