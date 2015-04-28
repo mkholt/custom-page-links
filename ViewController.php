@@ -18,13 +18,31 @@ class ViewController {
 	 *
 	 * @param string $view
 	 * @param array $vars
+	 * @param bool $echo
 	 *
 	 * @return string The parsed view
 	 */
-	public static function loadView($view, array $vars = [])
+	public static function loadView($view, array $vars = [], $echo = true)
 	{
 		$controller = new ViewController($view, $vars);
+
+		$view = $controller->load();
+
+		if ($echo)
+		{
+			echo $view;
+		}
+
 		return $controller->load();
+	}
+
+	public static function sendJson($ret, $status = 200)
+	{
+		header(sprintf("HTTP/1.1 %s %s", $status, HttpStatus::getStatus($status)));
+		header("Content-type: application/json");
+
+		echo json_encode($ret);
+		exit;
 	}
 
 	public function __construct($view = null, array $vars = [])
