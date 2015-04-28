@@ -55,7 +55,7 @@ var cpl_meta = (function($) {
                     self.parent.tb_remove();
                 });
             })
-            .on('click', '#cpl_delete_cancel', function(e) {
+            .on('click', '#cpl_modal_cancel', function(e) {
                 e.preventDefault();
                 self.parent.tb_remove();
             })

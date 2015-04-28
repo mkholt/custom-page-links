@@ -6,7 +6,7 @@
  * Time: 22:00
  */
 
-defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
+defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController' );
 ?>
 <?php
 if (!empty($meta))
@@ -71,6 +71,6 @@ if (!empty($meta))
 	?>
 </select>
 <div class="clear"></div>
-<?php submit_button(__('Add', $textDomain), ['secondary', 'large'], 'cpl_new_link', true, [
+<?= get_submit_button(__('Add', $textDomain), ['secondary', 'large'], 'cpl_new_link', true, [
 	'data-id' => $post->ID
 ]) ?>

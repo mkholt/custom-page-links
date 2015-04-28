@@ -25,6 +25,28 @@ class Metabox {
 		]);
 	}
 
+	public static function editForm($prefix, $postId = null, $linkId = null)
+	{
+		$args = [
+			'textDomain' => CustomPageLinks::TEXT_DOMAIN,
+			'prefix' => $prefix
+		];
+
+		if (!empty($postId) && !empty($linkId))
+		{
+			$args['postId'] = $postId;
+			$args['linkId'] = $linkId;
+			$args['link'] = Storage::getLink($postId, $linkId);
+		}
+		elseif (!empty($postId))
+		{
+			$args['postId'] = $postId;
+			$args['links'] = Storage::getLinks($postId);
+		}
+
+		return ViewController::loadView('editForm', $args, false);
+	}
+
 	public static function addAction()
 	{
 		add_action('wp_ajax_cpl_new_link', [__NAMESPACE__ . '\Metabox', 'addLink']);
@@ -53,6 +75,7 @@ class Metabox {
 		}
 
 		ViewController::loadView('remove', [
+			'postId' => $postId,
 			'link' => Storage::getLink($postId, $linkId),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
@@ -69,6 +92,7 @@ class Metabox {
 		}
 
 		ViewController::loadView('edit', [
+			'postId' => $postId,
 			'link' => Storage::getLink($postId, $linkId),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
