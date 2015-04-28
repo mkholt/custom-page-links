@@ -11,17 +11,17 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 	<strong><?= __('URL', $textDomain) ?></strong>
 </p>
 <label for="cpl_<?= $prefix ?>_href" class="screen-reader-text"><?= __('URL', $textDomain) ?></label>
-<input type="text" id="cpl_<?= $prefix ?>_href" value="<?= (!empty($link)) ? $link->getUrl() : '' ?>" />
+<input type="text" id="cpl_<?= $prefix ?>_href" name="cpl_href" value="<?= (!empty($link)) ? $link->getUrl() : '' ?>" />
 <p>
 	<strong><?= __('Title', $textDomain) ?></strong>
 </p>
 <label for="cpl_<?= $prefix ?>_title" class="screen-reader-text"><?= __('Title', $textDomain) ?></label>
-<input type="text" id="cpl_<?= $prefix ?>_title" valuE="<?= (!empty($link)) ? $link->getTitle() : '' ?>" />
+<input type="text" id="cpl_<?= $prefix ?>_title" name="cpl_title" value="<?= (!empty($link)) ? $link->getTitle() : '' ?>" />
 <p>
 	<strong><?= __('Target', $textDomain) ?></strong>
 </p>
 <label for="cpl_<?= $prefix ?>_target" class="screen-reader-text"><?= __('Target', $textDomain) ?></label>
-<select id="cpl_<?= $prefix ?>_target">
+<select id="cpl_<?= $prefix ?>_target" name="cpl_target">
 	<?php
 	foreach (\dk\mholt\CustomPageLinks\model\Link::getTargets() as $target)
 	{

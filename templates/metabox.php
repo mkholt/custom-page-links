@@ -46,31 +46,10 @@ if (!empty($meta))
 }
 ?>
 
-<p>
-	<strong><?= __('URL', $textDomain) ?></strong>
-</p>
-<label for="cpl_href" class="screen-reader-text"><?= __('URL', $textDomain) ?></label>
-<input type="text" id="cpl_href" />
-<p>
-	<strong><?= __('Title', $textDomain) ?></strong>
-</p>
-<label for="cpl_title" class="screen-reader-text"><?= __('Title', $textDomain) ?></label>
-<input type="text" id="cpl_title" />
-<p>
-	<strong><?= __('Target', $textDomain) ?></strong>
-</p>
-<label for="cpl_target" class="screen-reader-text"><?= __('Target', $textDomain) ?></label>
-<select id="cpl_target">
-	<?php
-	foreach (\dk\mholt\CustomPageLinks\model\Link::getTargets() as $target)
-	{
-		?>
-		<option value="<?= $target ?>"><?= $target ?></option>
-		<?php
-	}
-	?>
-</select>
-<div class="clear"></div>
-<?= get_submit_button(__('Add', $textDomain), ['secondary', 'large'], 'cpl_new_link', true, [
-	'data-id' => $post->ID
-]) ?>
+<div class="cpl_edit_form">
+	<?= \dk\mholt\CustomPageLinks\admin\Metabox::editForm('new') ?>
+	<div class="clear"></div>
+	<?= get_submit_button(__('Add', $textDomain), ['secondary', 'large'], 'cpl_new_link', true, [
+		'data-post_id' => $post->ID
+	]) ?>
+</div>

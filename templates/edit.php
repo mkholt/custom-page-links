@@ -9,7 +9,7 @@
 defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController' );
 ?>
 
-<div class="cpl_modal">
+<div class="cpl_modal cpl_edit_form">
 	<p>
 		<?= __(sprintf('Edit the link by updating the fields and cliking the button labelled "%s".', __('Save', $textDomain)), $textDomain) ?>
 	</p>

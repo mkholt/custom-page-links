@@ -52,6 +52,7 @@ class Metabox {
 		add_action('wp_ajax_cpl_new_link', [__NAMESPACE__ . '\Metabox', 'addLink']);
 		add_action('wp_ajax_cpl_remove_link', [__NAMESPACE__ . '\Metabox', 'removeLink']);
 		add_action('wp_ajax_cpl_edit_link', [__NAMESPACE__ . '\Metabox', 'editLink']);
+		add_action('wp_ajax_cpl_edit_confirm', [__NAMESPACE__ . '\Metabox', 'doEditLink']);
 	}
 
 	public static function addLink()
@@ -61,7 +62,7 @@ class Metabox {
 		$link->setTitle($_REQUEST['title']);
 		$link->setTarget($_REQUEST['target']);
 
-		ViewController::sendJson(["status" => Storage::addLink($_REQUEST['id'], $link)]);
+		ViewController::sendJson(["status" => Storage::addLink($_REQUEST['post_id'], $link)]);
 	}
 
 	public static function removeLink()
@@ -70,8 +71,7 @@ class Metabox {
 		$linkId = $_REQUEST['link_id'];
 
 		if (!empty($_REQUEST['confirm'])) {
-			echo json_encode( [ "status" => Storage::removeLink($postId, $linkId) ] );
-			exit;
+			ViewController::sendJson([ "status" => Storage::removeLink($postId, $linkId)]);
 		}
 
 		ViewController::loadView('remove', [
@@ -79,6 +79,7 @@ class Metabox {
 			'link' => Storage::getLink($postId, $linkId),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
+		wp_die();
 	}
 
 	public static function editLink()
@@ -86,16 +87,24 @@ class Metabox {
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
-		if (!empty($_REQUEST['confirm'])) {
-			//echo json_encode( [ "status" => Storage::removeLink($postId, $linkId) ] );
-			exit;
-		}
-
 		ViewController::loadView('edit', [
 			'postId' => $postId,
 			'link' => Storage::getLink($postId, $linkId),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
-		exit;
+		wp_die();
+	}
+
+	public static function doEditLink()
+	{
+		$postId = $_REQUEST['post_id'];
+		$linkId = $_REQUEST['link_id'];
+
+		$link = Storage::getLink($postId, $linkId);
+		$link->setUrl($_REQUEST['href']);
+		$link->setTitle($_REQUEST['title']);
+		$link->setTarget($_REQUEST['target']);
+
+		ViewController::sendJson(["status" => Storage::addLink($postId, $link)]);
 	}
 } 

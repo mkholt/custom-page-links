@@ -4,19 +4,21 @@
 var cpl_meta = (function($) {
     $(function() {
         $("body")
-            .on('click', '#cpl_new_link', function(e) {
+            .on('click', '#cpl_new_link, #cpl_edit_confirm', function(e) {
                 var $btn = $(this),
+                    $wrapper = $btn.closest('.cpl_edit_form'),
                     data = {
-                        action: "cpl_new_link",
-                        id: $btn.data('id'),
-                        href: $("#cpl_href").val(),
-                        title: $("#cpl_title").val(),
-                        target: $("#cpl_target").val()
+                        action: $btn.attr('id'),
+                        post_id: $btn.data('post_id'),
+                        link_id: $btn.data('link_id'),
+                        href: $wrapper.find("input[name=cpl_href]").val(),
+                        title: $wrapper.find("input[name=cpl_title]").val(),
+                        target: $wrapper.find("select[name=cpl_target]").val()
                     };
 
                 e.preventDefault();
 
-                if (!data.id)
+                if (!data.post_id)
                 {
                     return;
                 }
@@ -35,7 +37,7 @@ var cpl_meta = (function($) {
                     return;
                 }
 
-                $.post(ajax_object.ajax_url, data, function(data) {
+                $.post(ajaxurl, data, function(data) {
                     alert(data);
                 });
             })
@@ -50,7 +52,7 @@ var cpl_meta = (function($) {
 
                 e.preventDefault();
 
-                $.post(ajax_object.ajax_url, data, function(data) {
+                $.post(ajaxurl, data, function(data) {
                     alert(data);
                     self.parent.tb_remove();
                 });

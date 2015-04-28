@@ -75,9 +75,6 @@ class CustomPageLinks
 
 		wp_enqueue_script('cpl-metabox', plugins_url('/js/metabox.js', __FILE__),
 			['jquery']);
-		wp_localize_script('cpl-metabox', 'ajax_object', [
-			'ajax_url' => admin_url('admin-ajax.php')
-		]);
 	}
 
 	public function addMetaBoxes($type)
