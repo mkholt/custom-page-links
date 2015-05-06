@@ -24,10 +24,15 @@ class Autoload {
 		if(strpos($cls, __NAMESPACE__) !== 0)
 			return;
 
-		$cls = str_replace(__NAMESPACE__, '', $cls);
-		$cls = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $cls), '/');
-		$path = sprintf("%s%s.php", CustomPageLinks::$PLUGIN_PATH, $cls);
+		$filename = str_replace(__NAMESPACE__, '', $cls);
+		$filename = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $filename), '/');
+		$path = sprintf("%s%s.php", CustomPageLinks::$PLUGIN_PATH, $filename);
 
 		require_once($path);
+
+		if (is_callable([$cls, '__init__']))
+		{
+			call_user_func([$cls, '__init__']);
+		}
 	}
 } 
