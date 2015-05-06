@@ -55,8 +55,15 @@ class Metabox {
 		add_action('wp_ajax_cpl_edit_confirm', [__NAMESPACE__ . '\Metabox', 'doEditLink']);
 	}
 
+	private static function checkAccess()
+	{
+		current_user_can('edit_others_pages') || wp_die();
+	}
+
 	public static function addLink()
 	{
+		self::checkAccess();
+
 		$link = new Link();
 		$link->setUrl($_REQUEST['href']);
 		$link->setTitle($_REQUEST['title']);
@@ -67,6 +74,8 @@ class Metabox {
 
 	public static function removeLink()
 	{
+		self::checkAccess();
+
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
@@ -84,6 +93,8 @@ class Metabox {
 
 	public static function editLink()
 	{
+		self::checkAccess();
+
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
@@ -92,11 +103,14 @@ class Metabox {
 			'link' => Storage::getLink($postId, $linkId),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
+		
 		wp_die();
 	}
 
 	public static function doEditLink()
 	{
+		self::checkAccess();
+
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
