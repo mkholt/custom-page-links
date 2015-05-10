@@ -9,6 +9,8 @@
 namespace dk\mholt\CustomPageLinks;
 
 class Autoload {
+	protected $pluginPath;
+
 	public static function register() {
 		$autoloader = new Autoload();
 		spl_autoload_register([$autoloader, 'load']);
@@ -16,6 +18,7 @@ class Autoload {
 
 	private function __construct()
 	{
+		$this->pluginPath = plugin_dir_path( __FILE__ );
 	}
 
 	public function load($cls)
@@ -26,7 +29,7 @@ class Autoload {
 
 		$filename = str_replace(__NAMESPACE__, '', $cls);
 		$filename = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $filename), '/');
-		$path = sprintf("%s%s.php", CustomPageLinks::$PLUGIN_PATH, $filename);
+		$path = sprintf("%s%s.php", $this->pluginPath, $filename);
 
 		require_once($path);
 
