@@ -31,24 +31,12 @@ class CustomPageLinks
 
 		$this->addHooks();
 
-		add_action('admin_enqueue_scripts', [$this, 'addScripts']);
-
 		Metabox::addAction();
 	}
 
 	public function addHooks()
 	{
 		add_action('add_meta_boxes', [$this, 'addMetaBoxes']);
-	}
-
-	public function addScripts($hook)
-	{
-		if (!in_array($hook, ['post.php', 'post-new.php'])) {
-			return;
-		}
-
-		wp_enqueue_script('cpl-metabox', plugins_url('/js/metabox.js', __FILE__),
-			['jquery']);
 	}
 
 	public function addMetaBoxes($type)

@@ -8,43 +8,42 @@
 
 defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController' );
 ?>
-<?php
-if (!empty($meta))
-{
-?>
-	<p>
-		<strong><?= __('Existing', $textDomain) ?></strong>
-	</p>
-	<ul id="cpl_existing">
-		<?php
-		foreach ($meta as $link)
-		{
+<p>
+	<strong><?= __('Existing', $textDomain) ?></strong>
+</p>
+<ul id="cpl_existing">
+	<?php
+	if (!empty($meta)) {
+		foreach ( $meta as $link ) {
 			/** @var dk\mholt\CustomPageLinks\model\Link $link */
 			?>
 			<li>
 				<?= $link->toString() ?>
 				[ <a href="<?= add_query_arg(
 					[
-						"action" => "cpl_edit_link",
+						"action"  => "cpl_edit_link",
 						"post_id" => $post->ID,
 						"link_id" => $link->getId()
-					], admin_url('admin-ajax.php')) ?>" class="thickbox"
-					title="<?= __('Edit link', $textDomain) ?>"><?= __('Edit', $textDomain) ?></a> ]
+					],
+					admin_url( 'admin-ajax.php' ) ) ?>" class="thickbox"
+				     title="<?= __( 'Edit link', $textDomain ) ?>"><?= __( 'Edit', $textDomain ) ?></a> ]
 				[ <a href="<?= add_query_arg(
 					[
-						"action" => "cpl_remove_link",
+						"action"  => "cpl_remove_link",
 						"post_id" => $post->ID,
 						"link_id" => $link->getId()
-					], admin_url('admin-ajax.php')) ?>" class="thickbox"
-					title="<?= __('Delete link', $textDomain) ?>"><?= __('Delete', $textDomain) ?></a> ]
+					],
+					admin_url( 'admin-ajax.php' ) ) ?>" class="thickbox"
+				     title="<?= __( 'Delete link', $textDomain ) ?>"><?= __( 'Delete', $textDomain ) ?></a> ]
 			</li>
-			<?php
+		<?php
 		}
-		?>
-	</ul>
-<?php
-}
-?>
+	}
+	?>
+	<li class="cpl-no-existing <?= (!empty($meta)) ? 'hidden' : '' ?>">
+		<em><?= __( 'No existing links', $textDomain ) ?></em>
+	</li>
+</ul>
 
 <div class="cpl_edit_form">
 	<?= \dk\mholt\CustomPageLinks\admin\Metabox::editForm('new') ?>

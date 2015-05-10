@@ -9,10 +9,11 @@
 namespace dk\mholt\CustomPageLinks\model;
 
 
-class Link {
+class Link implements \JsonSerializable {
 	private $id;
 	private $url;
 	private $title;
+	private $mediaUrl;
 	private $target;
 
 	private static $targets = [
@@ -38,6 +39,8 @@ class Link {
 			? $target
 			: reset(self::$targets)
 		;
+
+		return $this;
 	}
 
 	/**
@@ -81,6 +84,26 @@ class Link {
 		$this->url = $url;
 	}
 
+	/**
+	 * @param string $mediaUrl
+	 *
+	 * @return Link
+	 */
+	public function setMediaUrl($mediaUrl)
+	{
+		$this->mediaUrl = $mediaUrl;
+
+		return $this;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getMediaUrl()
+	{
+		return $this->mediaUrl;
+	}
+
 	public static function validTarget($target)
 	{
 		return in_array($target, self::$targets);
@@ -94,13 +117,40 @@ class Link {
 	/**
 	 * @return string
 	 */
-	public function toString()
-	{
-		return sprintf("<a href=\"%s\" title=\"%s\" target=\"%s\">%s</a>",
+	public function toString() {
+		$mediaUrl = $this->getMediaUrl();
+		if ( ! empty( $mediaUrl ) ) {
+			$image = sprintf( "<img src=\"%s\" alt=\"\" />",
+				$mediaUrl
+			);
+		} else {
+			$image = "";
+		}
+
+		return sprintf( "
+			<div class=\"cpl-link\" data-link_id=\"%s\">
+				%s
+				<a href=\"%s\" title=\"%s\" target=\"%s\">%s</a>
+			</div>",
+			$this->getId(),
+			$image,
 			$this->getUrl(),
-			$this->getTitle(true),
+			$this->getTitle( true ),
 			$this->getTarget(),
-			$this->getTitle(true)
+			$this->getTitle( true )
 		);
 	}
+
+	function jsonSerialize() {
+		return [
+			'id'        => $this->getId(),
+			'url'       => $this->getUrl(),
+			'title'     => $this->getTitle(),
+			'mediaUrl'  => $this->getMediaUrl(),
+			'target'    => $this->getTarget(),
+			'html'      => $this->toString()
+		];
+	}
+
+
 } 

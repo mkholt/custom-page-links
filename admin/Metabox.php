@@ -20,111 +20,119 @@ class Metabox {
 		self::$className = __NAMESPACE__ . '\Metabox';
 	}
 
-	public static function addAction()
-	{
-		add_action('wp_ajax_cpl_new_link', [ self::$className, 'addLink']);
-		add_action('wp_ajax_cpl_remove_link', [__NAMESPACE__ . '\Metabox', 'removeLink']);
-		add_action('wp_ajax_cpl_edit_link', [__NAMESPACE__ . '\Metabox', 'editLink']);
-		add_action('wp_ajax_cpl_edit_confirm', [__NAMESPACE__ . '\Metabox', 'doEditLink']);
+	public static function addAction() {
+		add_action( 'wp_ajax_cpl_new_link', [ self::$className, 'addLink' ] );
+		add_action( 'wp_ajax_cpl_remove_link', [ __NAMESPACE__ . '\Metabox', 'removeLink' ] );
+		add_action( 'wp_ajax_cpl_edit_link', [ __NAMESPACE__ . '\Metabox', 'editLink' ] );
+		add_action( 'wp_ajax_cpl_edit_confirm', [ __NAMESPACE__ . '\Metabox', 'doEditLink' ] );
+		add_action( 'admin_enqueue_scripts', [ self::$className, 'addScripts' ] );
 	}
 
-	public static function addMetaBox(\WP_Post $post)
-	{
+	public static function addScripts($hook) {
+		if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ] ) ) {
+			return;
+		}
+
+		wp_enqueue_script( 'jquery' );
+		wp_enqueue_media();
+		wp_enqueue_script( 'cpl-metabox',
+			plugins_url( '../js/metabox.js', __FILE__ ),
+			[ 'jquery' ] );
+	}
+
+	public static function addMetaBox(\WP_Post $post) {
 		add_thickbox();
 
-		ViewController::loadView('metabox', [
-			'post' => $post,
-			'meta' => Storage::getLinks($post->ID),
+		ViewController::loadView( 'metabox',
+		[
+			'post'       => $post,
+			'meta'       => Storage::getLinks( $post->ID ),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
-		]);
+		] );
 	}
 
-	public static function editForm($prefix, $postId = null, $linkId = null)
-	{
+	public static function editForm($prefix, $postId = null, $linkId = null) {
 		$args = [
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN,
-			'prefix' => $prefix
+			'prefix'     => $prefix
 		];
 
-		if (!empty($postId) && !empty($linkId))
-		{
+		if ( ! empty( $postId ) && ! empty( $linkId ) ) {
 			$args['postId'] = $postId;
 			$args['linkId'] = $linkId;
-			$args['link'] = Storage::getLink($postId, $linkId);
-		}
-		elseif (!empty($postId))
-		{
+			$args['link']   = Storage::getLink( $postId, $linkId );
+		} elseif ( ! empty( $postId ) ) {
 			$args['postId'] = $postId;
-			$args['links'] = Storage::getLinks($postId);
+			$args['links']  = Storage::getLinks( $postId );
 		}
 
-		return ViewController::loadView('editForm', $args, false);
+		return ViewController::loadView( 'editForm', $args, false );
 	}
 
-	private static function checkAccess()
-	{
-		current_user_can('edit_others_pages') || wp_die();
+	private static function checkAccess() {
+		current_user_can( 'edit_others_pages' ) || wp_die();
 	}
 
-	public static function addLink()
-	{
+	public static function addLink() {
 		self::checkAccess();
-
-		$link = new Link();
-		$link->setUrl($_REQUEST['href']);
-		$link->setTitle($_REQUEST['title']);
-		$link->setTarget($_REQUEST['target']);
-
-		ViewController::sendJson(["status" => Storage::addLink($_REQUEST['post_id'], $link)]);
+		self::updateLink( new Link(), $_REQUEST['post_id'] );
 	}
 
-	public static function removeLink()
-	{
+	public static function removeLink() {
 		self::checkAccess();
 
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
-		if (!empty($_REQUEST['confirm'])) {
-			ViewController::sendJson([ "status" => Storage::removeLink($postId, $linkId)]);
+		if ( ! empty( $_REQUEST['confirm'] ) ) {
+			ViewController::sendJson( [ "status" => Storage::removeLink( $postId, $linkId ) ] );
 		}
 
-		ViewController::loadView('remove', [
-			'postId' => $postId,
-			'link' => Storage::getLink($postId, $linkId),
+		ViewController::loadView( 'remove',
+		[
+			'postId'     => $postId,
+			'link'       => Storage::getLink( $postId, $linkId ),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
-		]);
+		] );
 		wp_die();
 	}
 
-	public static function editLink()
-	{
+	public static function editLink() {
 		self::checkAccess();
 
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
-		ViewController::loadView('edit', [
-			'postId' => $postId,
-			'link' => Storage::getLink($postId, $linkId),
+		ViewController::loadView( 'edit',
+		[
+			'postId'     => $postId,
+			'link'       => Storage::getLink( $postId, $linkId ),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
-		]);
+		] );
 
 		wp_die();
 	}
 
-	public static function doEditLink()
-	{
+	public static function doEditLink() {
 		self::checkAccess();
 
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
 
-		$link = Storage::getLink($postId, $linkId);
-		$link->setUrl($_REQUEST['href']);
-		$link->setTitle($_REQUEST['title']);
-		$link->setTarget($_REQUEST['target']);
+		$link = Storage::getLink( $postId, $linkId );
+		self::updateLink( $link, $postId );
+	}
 
-		ViewController::sendJson(["status" => Storage::addLink($postId, $link)]);
+	/**
+	 * @param Link $link
+	 * @param int $postId
+	 */
+	private static function updateLink( Link $link, $postId ) {
+		$link->setUrl( $_REQUEST['href'] );
+		$link->setTitle( $_REQUEST['title'] );
+		$link->setMediaUrl( $_REQUEST['media'] );
+		$link->setTarget( $_REQUEST['target'] );
+
+		ViewController::sendJson( [ "status" => Storage::addLink( $postId, $link ), "link" => $link ] );
 	}
 } 
