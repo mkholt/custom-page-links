@@ -5,6 +5,8 @@ var cpl_meta = (function($) {
     $(function() {
         $("body")
             .on('click', '#cpl_new_link, #cpl_edit_confirm', function(e) {
+                e.preventDefault();
+
                 var $btn = $(this),
                     $wrapper = $btn.closest('.cpl_edit_form'),
                     data = {
@@ -17,24 +19,21 @@ var cpl_meta = (function($) {
                         target: $wrapper.find("select[name=cpl_target]").val()
                     };
 
-                e.preventDefault();
-
                 if (!data.post_id)
                 {
+                    alert('Missing post ID, please try to reload the page.');
                     return;
                 }
 
                 if (!data.href)
                 {
-                    // TODO : Handle mising href
-                    alert('href');
+                    alert('You must enter a URL');
                     return;
                 }
 
                 if (!data.title)
                 {
-                    // TODO : Handle missing title
-                    alert('title');
+                    alert('You must enter a title');
                     return;
                 }
 
