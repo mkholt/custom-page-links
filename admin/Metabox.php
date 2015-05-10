@@ -14,6 +14,20 @@ use dk\mholt\CustomPageLinks\Storage;
 use dk\mholt\CustomPageLinks\ViewController;
 
 class Metabox {
+	protected static $className;
+
+	public static function __init__() {
+		self::$className = __NAMESPACE__ . '\Metabox';
+	}
+
+	public static function addAction()
+	{
+		add_action('wp_ajax_cpl_new_link', [ self::$className, 'addLink']);
+		add_action('wp_ajax_cpl_remove_link', [__NAMESPACE__ . '\Metabox', 'removeLink']);
+		add_action('wp_ajax_cpl_edit_link', [__NAMESPACE__ . '\Metabox', 'editLink']);
+		add_action('wp_ajax_cpl_edit_confirm', [__NAMESPACE__ . '\Metabox', 'doEditLink']);
+	}
+
 	public static function addMetaBox(\WP_Post $post)
 	{
 		add_thickbox();
@@ -45,14 +59,6 @@ class Metabox {
 		}
 
 		return ViewController::loadView('editForm', $args, false);
-	}
-
-	public static function addAction()
-	{
-		add_action('wp_ajax_cpl_new_link', [__NAMESPACE__ . '\Metabox', 'addLink']);
-		add_action('wp_ajax_cpl_remove_link', [__NAMESPACE__ . '\Metabox', 'removeLink']);
-		add_action('wp_ajax_cpl_edit_link', [__NAMESPACE__ . '\Metabox', 'editLink']);
-		add_action('wp_ajax_cpl_edit_confirm', [__NAMESPACE__ . '\Metabox', 'doEditLink']);
 	}
 
 	private static function checkAccess()
@@ -103,7 +109,7 @@ class Metabox {
 			'link' => Storage::getLink($postId, $linkId),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		]);
-		
+
 		wp_die();
 	}
 
