@@ -78,7 +78,7 @@ var cpl_meta = (function($) {
                         }
                     }
                     else {
-                        alert('An error occured removing the link');
+                        alert('An error occurred removing the link');
                     }
                 });
             })
