@@ -80,10 +80,18 @@ class Link implements \JsonSerializable {
 
 	/**
 	 * @param string $url
+	 *
+	 * @return Link
 	 */
 	public function setUrl( $url ) {
-		// TODO : Validate URL
-		$this->url = $url;
+		$this->url = esc_url($url);
+
+		if (empty($this->url))
+		{
+			throw new \Exception("Invalid url rejected");
+		}
+
+		return $this;
 	}
 
 	/**
@@ -93,7 +101,7 @@ class Link implements \JsonSerializable {
 	 */
 	public function setMediaUrl($mediaUrl)
 	{
-		$this->mediaUrl = $mediaUrl;
+		$this->mediaUrl = !empty($mediaUrl) ? esc_url($mediaUrl) : null;
 
 		return $this;
 	}
