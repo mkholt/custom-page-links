@@ -12,7 +12,7 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 <div class="cpl_modal">
 	<p>
 		<?php
-		printf(__('Are you sure you want to remove the link to %s?'), $link->getUrl());
+		printf(__('Are you sure you want to remove the link to %s?'), esc_url($link->getUrl()));
 		?>
 		<br/>
 		<?= __('The action cannot be undone.') ?>
