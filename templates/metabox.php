@@ -19,22 +19,7 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 			?>
 			<li>
 				<?= $link->toString() ?>
-				[ <a href="<?= add_query_arg(
-					[
-						"action"  => "cpl_edit_link",
-						"post_id" => $post->ID,
-						"link_id" => $link->getId()
-					],
-					admin_url( 'admin-ajax.php' ) ) ?>" class="thickbox"
-				     title="<?= __( 'Edit link', $textDomain ) ?>"><?= __( 'Edit', $textDomain ) ?></a> ]
-				[ <a href="<?= add_query_arg(
-					[
-						"action"  => "cpl_remove_link",
-						"post_id" => $post->ID,
-						"link_id" => $link->getId()
-					],
-					admin_url( 'admin-ajax.php' ) ) ?>" class="thickbox"
-				     title="<?= __( 'Delete link', $textDomain ) ?>"><?= __( 'Delete', $textDomain ) ?></a> ]
+				<?= \dk\mholt\CustomPageLinks\admin\Metabox::linkActions($post->ID, $link->getId()) ?>
 			</li>
 		<?php
 		}

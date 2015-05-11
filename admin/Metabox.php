@@ -25,6 +25,7 @@ class Metabox {
 		add_action( 'wp_ajax_cpl_remove_link', [ __NAMESPACE__ . '\Metabox', 'removeLink' ] );
 		add_action( 'wp_ajax_cpl_edit_link', [ __NAMESPACE__ . '\Metabox', 'editLink' ] );
 		add_action( 'wp_ajax_cpl_edit_confirm', [ __NAMESPACE__ . '\Metabox', 'doEditLink' ] );
+		add_action( 'wp_ajax_cpl_link_actions', [ self::$className, 'getLinkActions' ] );
 		add_action( 'admin_enqueue_scripts', [ self::$className, 'addScripts' ] );
 	}
 
@@ -49,6 +50,27 @@ class Metabox {
 			'meta'       => Storage::getLinks( $post->ID ),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		] );
+	}
+
+	public static function getLinkActions()
+	{
+		self::checkAccess();
+
+		$postId = $_REQUEST['post_id'];
+		$linkId = $_REQUEST['link_id'];
+
+		echo self::linkActions($postId, $linkId);
+		wp_die();
+	}
+
+	public static function linkActions($postId, $linkId) {
+		$args = [
+			"textDomain" => CustomPageLinks::TEXT_DOMAIN,
+			"postId"     => $postId,
+			"linkId"     => $linkId
+		];
+
+		return ViewController::loadView( 'linkActions', $args, false );
 	}
 
 	public static function editForm($prefix, $postId = null, $linkId = null) {

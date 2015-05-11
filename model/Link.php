@@ -9,6 +9,8 @@
 namespace dk\mholt\CustomPageLinks\model;
 
 
+use dk\mholt\CustomPageLinks\ViewController;
+
 class Link implements \JsonSerializable {
 	private $id;
 	private $url;
@@ -118,27 +120,7 @@ class Link implements \JsonSerializable {
 	 * @return string
 	 */
 	public function toString() {
-		$mediaUrl = $this->getMediaUrl();
-		if ( ! empty( $mediaUrl ) ) {
-			$image = sprintf( "<img src=\"%s\" alt=\"\" />",
-				$mediaUrl
-			);
-		} else {
-			$image = "";
-		}
-
-		return sprintf( "
-			<div class=\"cpl-link\" data-link_id=\"%s\">
-				%s
-				<a href=\"%s\" title=\"%s\" target=\"%s\">%s</a>
-			</div>",
-			$this->getId(),
-			$image,
-			$this->getUrl(),
-			$this->getTitle( true ),
-			$this->getTarget(),
-			$this->getTitle( true )
-		);
+		return ViewController::loadView('link', ['link' => $this], false);
 	}
 
 	function jsonSerialize() {
