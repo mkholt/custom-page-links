@@ -20,29 +20,14 @@ class CustomPageLinks
 	 */
 	public static function initialize()
 	{
-		$cpl = new CustomPageLinks();
-
-		return $cpl;
+		return new CustomPageLinks();
 	}
 
 	private function __construct()
 	{
 		self::$PLUGIN_PATH =  plugin_dir_path( __FILE__ );
 
-		$this->addHooks();
-
-		Metabox::addAction();
-	}
-
-	public function addHooks()
-	{
-		add_action('add_meta_boxes', [$this, 'addMetaBoxes']);
-	}
-
-	public function addMetaBoxes($type)
-	{
-		$metabox = new Metabox();
-		add_meta_box('custom-page-links', __('Custom Page Links', self::TEXT_DOMAIN), [$metabox, 'addMetaBox'], 'page', 'side');
+		Metabox::init();
 	}
 
 	private static function esc_html_recursive( $data = FALSE ) {

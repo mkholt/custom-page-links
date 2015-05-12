@@ -20,13 +20,32 @@ class Metabox {
 		self::$className = __NAMESPACE__ . '\Metabox';
 	}
 
+	public static function init() {
+		self::addAction();
+	}
+
 	public static function addAction() {
+		$func = function() {
+			add_action( 'add_meta_boxes', [ self::$className, 'addMetaBoxes' ] );
+		};
+		add_action('load-page.php', $func);
+		add_action('load-page-new.php', $func);
+
+
 		add_action( 'wp_ajax_cpl_new_link', [ self::$className, 'addLink' ] );
-		add_action( 'wp_ajax_cpl_remove_link', [ __NAMESPACE__ . '\Metabox', 'removeLink' ] );
-		add_action( 'wp_ajax_cpl_edit_link', [ __NAMESPACE__ . '\Metabox', 'editLink' ] );
-		add_action( 'wp_ajax_cpl_edit_confirm', [ __NAMESPACE__ . '\Metabox', 'doEditLink' ] );
+		add_action( 'wp_ajax_cpl_remove_link', [ self::$className, 'removeLink' ] );
+		add_action( 'wp_ajax_cpl_edit_link', [ self::$className, 'editLink' ] );
+		add_action( 'wp_ajax_cpl_edit_confirm', [ self::$className, 'doEditLink' ] );
 		add_action( 'wp_ajax_cpl_link_actions', [ self::$className, 'getLinkActions' ] );
 		add_action( 'admin_enqueue_scripts', [ self::$className, 'addScripts' ] );
+	}
+
+	public function addMetaBoxes($type) {
+		add_meta_box( 'custom-page-links',
+			__( 'Custom Page Links', CustomPageLinks::TEXT_DOMAIN ),
+			[ self::$className, 'addMetaBox' ],
+			'page',
+			'side' );
 	}
 
 	public static function addScripts($hook) {

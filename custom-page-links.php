@@ -35,9 +35,7 @@ require_once('Autoload.php');
 Autoload::register();
 
 if (is_admin()) {
-	$cpl = CustomPageLinks::initialize();
-	add_action('load-page.php', [$cpl, 'addHooks']);
-	add_action('load-page-new.php', [$cpl, 'addHooks']);
+	CustomPageLinks::initialize();
 }
 
 Shortcode::addShortcode();
