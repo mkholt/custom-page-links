@@ -12,6 +12,9 @@ namespace dk\mholt\CustomPageLinks;
 class Shortcode {
 	public static function addShortcode() {
 		add_shortcode( 'cpl', [ __NAMESPACE__ . '\Shortcode', 'printLinks' ] );
+
+		wp_enqueue_style( 'cpl-screen', plugins_url( 'stylesheets/screen.css', __FILE__ ), [], false, 'screen,projection' );
+		wp_enqueue_style( 'cpl-print', plugins_url( 'stylesheets/print.css', __FILE__ ), [], false, 'print' );
 	}
 
 	public static function printLinks() {
@@ -20,7 +23,7 @@ class Shortcode {
 		$ret = "";
 		foreach ($links as $link)
 		{
-			$ret .= $link->toString() . "<br/>\n";
+			$ret .= $link->toString();
 		}
 
 		return $ret;

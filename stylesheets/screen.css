@@ -1,0 +1,40 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+/* line 7, ../sass/screen.scss */
+#cpl_existing li {
+  position: relative;
+}
+/* line 10, ../sass/screen.scss */
+#cpl_existing li:nth-child(odd) {
+  background: #EEE;
+}
+/* line 12, ../sass/screen.scss */
+#cpl_existing li:nth-child(odd) .cpl-link-actions {
+  background: #EEE;
+}
+/* line 17, ../sass/screen.scss */
+#cpl_existing li .cpl-link-actions {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  display: inline-block;
+  background: #FFF;
+  padding: 0 0 0 1em;
+}
+/* line 26, ../sass/screen.scss */
+#cpl_existing li .cpl-link-actions a:before {
+  content: '[ ';
+}
+/* line 30, ../sass/screen.scss */
+#cpl_existing li .cpl-link-actions a:after {
+  content: " ]";
+}
+
+/* line 39, ../sass/screen.scss */
+.cpl-link .cpl-media {
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+}

@@ -15,6 +15,10 @@ class CustomPageLinks
 	const TEXT_DOMAIN = "custom_page_links";
 	public static $PLUGIN_PATH;
 
+	public static function __init__() {
+		self::$PLUGIN_PATH =  plugin_dir_path( __FILE__ );
+	}
+
 	/**
 	 * @return CustomPageLinks
 	 */
@@ -25,8 +29,6 @@ class CustomPageLinks
 
 	private function __construct()
 	{
-		self::$PLUGIN_PATH =  plugin_dir_path( __FILE__ );
-
 		Metabox::init();
 	}
 
@@ -53,7 +55,7 @@ class CustomPageLinks
 
 		$error  = "<h2>Registration Error</h2>\r\n";
 		$error .= "<p><strong>{$msg}</strong></p>\r\n";
-		$error .= "<p><strong>Backtrace:</strong><br><em>NB: file paths are relative to '".self::esc_html_recursive($baseFolder)."/wp-content/plugins/registration'</em></p>";
+		$error .= "<p><strong>Backtrace:</strong><br><em>NB: file paths are relative to '".self::$PLUGIN_PATH."'</em></p>";
 
 		$bt_out  = '';
 
