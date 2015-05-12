@@ -9,6 +9,7 @@
 namespace dk\mholt\CustomPageLinks;
 
 use dk\mholt\CustomPageLinks\model\Link;
+use dk\mholt\CustomPageLinks\model\Visit;
 
 class Storage {
 	const META_TAG = 'customPageLinks';
@@ -32,7 +33,7 @@ class Storage {
 
 	/**
 	 * @param int $postId
-	 * @param int $linkId
+	 * @param string $linkId
 	 *
 	 * @throws \Exception
 	 *
@@ -70,8 +71,8 @@ class Storage {
 	/**
 	 * Remove the link given by the post and link id
 	 *
-	 * @param $postId
-	 * @param $linkId
+	 * @param int $postId
+	 * @param string $linkId
 	 * @return int|bool True on successful update,
 	 *                  false on failure.
 	 */
