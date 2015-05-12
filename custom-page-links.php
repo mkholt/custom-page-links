@@ -39,3 +39,4 @@ if (is_admin()) {
 }
 
 Shortcode::addShortcode();
+Landing::init();

@@ -7,6 +7,13 @@
  */
 defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController' );
 
+$adminUrl = admin_url( 'admin-ajax.php' );
+$args = [
+	'action' => dk\mholt\CustomPageLinks\Landing::LANDING_ACTION,
+	'post' => get_the_ID(),
+	'link' => $link->getId()
+];
+$href = add_query_arg( $args, $adminUrl );
 ?>
 <div class="cpl-link" data-link_id="<?= $link->getId() ?>">
 	<span class="cpl-media">
@@ -20,9 +27,9 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 		?>
 	</span>
 	<a
-		href="<?= esc_url($link->getUrl()) ?>"
-		title="<?= $link->getTitle(true) ?>"
+		href="<?= esc_url( $href ) ?>"
+		title="<?= $link->getTitle( true ) ?>"
 		target="<?= $link->getTarget() ?>">
-		<?= $link->getTitle(true) ?>
+		<?= $link->getTitle( true ) ?>
 	</a>
 </div>
