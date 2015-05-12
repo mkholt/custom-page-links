@@ -15,6 +15,18 @@
   background: #EEE;
 }
 /* line 17, ../sass/screen.scss */
+#cpl_existing li .cpl-media {
+  display: none;
+}
+/* line 22, ../sass/screen.scss */
+#cpl_existing li:hover .cpl-media {
+  display: inline-block;
+  position: absolute;
+  border: 1px solid #000;
+  z-index: 1000;
+  background: #FFF;
+}
+/* line 31, ../sass/screen.scss */
 #cpl_existing li .cpl-link-actions {
   position: absolute;
   bottom: 0;
@@ -23,18 +35,24 @@
   background: #FFF;
   padding: 0 0 0 1em;
 }
-/* line 26, ../sass/screen.scss */
+/* line 40, ../sass/screen.scss */
 #cpl_existing li .cpl-link-actions a:before {
   content: '[ ';
 }
-/* line 30, ../sass/screen.scss */
+/* line 44, ../sass/screen.scss */
 #cpl_existing li .cpl-link-actions a:after {
   content: " ]";
 }
 
-/* line 39, ../sass/screen.scss */
+/* line 53, ../sass/screen.scss */
 .cpl-link .cpl-media {
   width: 32px;
   height: 32px;
   display: inline-block;
+}
+/* line 58, ../sass/screen.scss */
+.cpl-link .cpl-media img {
+  max-width: 100%;
+  max-height: 100%;
+  vertical-align: baseline;
 }
