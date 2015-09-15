@@ -19,12 +19,15 @@ class Landing {
 	}
 
 	public static function init() {
-		add_action( "wp_ajax_" . self::LANDING_ACTION, function() {
-			$link = Storage::getLink($_REQUEST['post'], $_REQUEST['link']);
+		add_action( "wp_ajax_" . self::LANDING_ACTION, [ self::$className, "visitLink" ]);
+		add_action( "wp_ajax_nopriv_" . self::LANDING_ACTION, [ self::$className, "visitLink" ]);
+	}
 
-			header('HTTP/1.1 '.HttpStatus::HttpTemporaryRedirect);
-			header(sprintf('Location: %s', $link->getUrl()));
-			wp_die();
-		} );
+	public static function visitLink() {
+		$link = Storage::getLink($_REQUEST['post'], $_REQUEST['link']);
+
+		header('HTTP/1.1 '.HttpStatus::HttpTemporaryRedirect);
+		header(sprintf('Location: %s', $link->getUrl()));
+		wp_die();
 	}
 } 
