@@ -2,7 +2,9 @@
  * Created by morten on 22-04-15.
  */
 var cpl_meta = (function($) {
-    $(function() {
+    'use strict';
+
+    function _init() {
         $("body")
             .on('click', '#cpl_edit_confirm', function(e) {
                 e.preventDefault();
@@ -25,26 +27,25 @@ var cpl_meta = (function($) {
 
                 if (!data.post_id)
                 {
-                    // TODO : I18n support for messages in JS
-                    alert('Missing post ID, please try to reload the page.');
+                    alert(cplMetaboxLang.missingPostId);
                     return;
                 }
 
                 if (!data.href)
                 {
-                    alert('You must enter a URL');
+                    alert(cplMetaboxLang.hrefRequired);
                     return;
                 }
 
                 if (!data.title)
                 {
-                    alert('You must enter a title');
+                    alert(cplMetaboxLang.titleRequired);
                     return;
                 }
 
                 $.post(ajaxurl, data, function(returnData) {
                     if (!returnData.status) {
-                        alert('An error occured adding the link');
+                        alert(cplMetaboxLang.errorOccurredAdding);
                         return;
                     }
 
@@ -110,7 +111,7 @@ var cpl_meta = (function($) {
                         }
                     }
                     else {
-                        alert('An error occurred removing the link');
+                        alert(cplMetaboxLang.errorOccurredRemoving);
                     }
                 });
             })
@@ -144,7 +145,7 @@ var cpl_meta = (function($) {
                 }).open().on('select', function(e) { pickMedia(image, $field, $title); });
             })
             ;
-    });
+    }
 
     function pickMedia(image, $href, $title) {
         // This will return the selected image from the Media Uploader, the result is an object
@@ -157,4 +158,13 @@ var cpl_meta = (function($) {
         // If we have a title field, assign the title of the media object there
         $title && $title.val(media.title);
     }
+
+    return  {
+        init: _init
+    };
 })(jQuery);
+
+jQuery(document).ready(function($) {
+    'use strict';
+    cpl_meta.init();
+});

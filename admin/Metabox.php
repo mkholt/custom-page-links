@@ -61,6 +61,14 @@ class Metabox {
 		wp_enqueue_script( 'cpl-link_btn',
 			plugins_url( '../js/link.js', __FILE__ ),
 			[ 'jquery' ], '1.0', true);
+
+		wp_localize_script( 'cpl-metabox', 'cplMetaboxLang', [
+			'missingPostId'         => __( 'Missing post ID, please try to reload the page.', CustomPageLinks::TEXT_DOMAIN ),
+			'hrefRequired'          => __( 'You must enter a URL', CustomPageLinks::TEXT_DOMAIN ),
+			'titleRequired'         => __( 'You must enter a title', CustomPageLinks::TEXT_DOMAIN ),
+			'errorOccurredAdding'   => __( 'An error occured adding the link', CustomPageLinks::TEXT_DOMAIN ),
+			'errorOccurredRemoving' => __( 'An error occurred removing the link', CustomPageLinks::TEXT_DOMAIN )
+		]);
 	}
 
 	public static function addMetaBox(\WP_Post $post) {
