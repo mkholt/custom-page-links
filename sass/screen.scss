@@ -7,7 +7,7 @@
   li {
     position: relative;
 
-    &:nth-child(odd) {
+    &:nth-child(odd):not(.cpl-add-link) {
       background: #EEE;
       .cpl-link-actions {
         background: #EEE;
@@ -28,6 +28,10 @@
       }
     }
 
+    .cpl-link {
+      height: 23px;
+    }
+
     .cpl-link-actions {
       position: absolute;
       bottom: 0;
@@ -35,15 +39,10 @@
       display: inline-block;
       background: #FFF;
       padding: 0 0 0 1em;
+      height: 23px;
 
       a {
-        &:before {
-          content: '[ ';
-        }
-
-        &:after {
-          content: ' ]'
-        }
+        text-decoration: none;
       }
     }
   }
@@ -62,4 +61,43 @@
       vertical-align: baseline;
     }
   }
+}
+
+.cpl_edit_form {
+  p.howto {
+    margin: 3px 0;
+  }
+
+  div {
+    label {
+      a {
+        text-decoration: none;
+        span {
+          text-align: left;
+          padding-left: 5px;
+          padding-right: 0;
+          width: auto;
+        }
+      }
+
+      span {
+        display: inline-block;
+        width: 80px;
+        text-align: right;
+        padding-right: 5px;
+        max-width: 24%;
+        vertical-align: bottom;
+      }
+
+      input[type=text] {
+        margin-top: 5px;
+        width: 70%;
+      }
+    }
+  }
+}
+
+#cpl_delete_confirm {
+  color: #a00;
+  text-decoration: none;
 }

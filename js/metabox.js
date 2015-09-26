@@ -4,7 +4,7 @@
 var cpl_meta = (function($) {
     $(function() {
         $("body")
-            .on('click', '#cpl_new_link, #cpl_edit_confirm', function(e) {
+            .on('click', '#cpl_edit_confirm', function(e) {
                 e.preventDefault();
 
                 var $btn = $(this),
@@ -78,10 +78,7 @@ var cpl_meta = (function($) {
                         $target.val($target.find('option:first').attr('value'));
                     });
 
-                    if (data.link_id)
-                    {
-                        self.parent.tb_remove();
-                    }
+                    self.parent.tb_remove();
                 });
             })
             .on('click', '#cpl_delete_confirm', function(e) {
@@ -121,28 +118,43 @@ var cpl_meta = (function($) {
                 e.preventDefault();
                 self.parent.tb_remove();
             })
-            .on('click', '.cpl-media-btn', function(e) {
+            .on('click', '#cpl_media_pick', function(e) {
                 e.preventDefault();
 
                 var $this       = $(this),
-                    $wrapper    = $this.closest('.cpl_edit_form'),
-                    $field      = $wrapper.find('[name=cpl_media]');
+                    $field      = $this.siblings('input')
+                    ;
 
                 var image = wp.media({
                     title: 'Choose Image',
                     multiple: false
-                }).open()
-                    .on('select', function (e) {
-                        // This will return the selected image from the Media Uploader, the result is an object
-                        var uploaded_image = image.state().get('selection').first();
+                }).open().on('select', function(e) { pickMedia(image, $field); });
+            })
+            .on('click', '#cpl_href_pick_media', function(e) {
+                e.preventDefault();
 
-                        // We convert uploaded_image to a JSON object to make accessing it easier
-                        var image_url = uploaded_image.toJSON().url;
+                var $this   = $(this),
+                    $field  = $this.siblings('input'),
+                    $title  = $('#cpl_title_field')
+                ;
 
-                        // Let's assign the url value to the input field
-                        $field.val(image_url);
-                    });
+                var image = wp.media({
+                    title: 'Pick media',
+                    multiple: false
+                }).open().on('select', function(e) { pickMedia(image, $field, $title); });
             })
             ;
     });
+
+    function pickMedia(image, $href, $title) {
+        // This will return the selected image from the Media Uploader, the result is an object
+        // We convert it to JSON to make accessing easier
+        var media = image.state().get('selection').first().toJSON();
+
+        // Let's assign the url value to the input field
+        $href.val(media.url);
+
+        // If we have a title field, assign the title of the media object there
+        $title && $title.val(media.title);
+    }
 })(jQuery);

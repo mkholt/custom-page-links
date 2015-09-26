@@ -25,9 +25,9 @@ $deleteLink = add_query_arg($deleteArgs, $adminUrl);
 ?>
 <div class="cpl-link-actions">
 	<a href="<?= $editLink ?>" class="thickbox" title="<?= __( 'Edit link', $textDomain ) ?>">
-		<?= __( 'Edit', $textDomain ) ?>
+		<span class="dashicons dashicons-edit"></span>
 	</a>
 	<a href="<?= $deleteLink ?>" class="thickbox" title="<?= __( 'Delete link', $textDomain ) ?>">
-		<?= __( 'Delete', $textDomain ) ?>
+		<span class="dashicons dashicons-no"></span>
 	</a>
 </div>

@@ -7,6 +7,14 @@
  */
 
 defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController' );
+
+$adminUrl = admin_url( 'admin-ajax.php' );
+$addArgs = [
+	"action"  => "cpl_edit_link",
+	"post_id" => $post->ID
+];
+$addLink = add_query_arg($addArgs, $adminUrl);
+
 ?>
 <p>
 	<strong><?= __('Existing', $textDomain) ?></strong>
@@ -28,12 +36,12 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 	<li class="cpl-no-existing <?= (!empty($meta)) ? 'hidden' : '' ?>">
 		<em><?= __( 'No existing links', $textDomain ) ?></em>
 	</li>
+	<li class="cpl-add-link">
+		<div class="cpl-link"></div>
+		<div class="cpl-link-actions">
+			<a href="<?= $addLink ?>" class="thickbox" title="<?= __( 'Add link', $textDomain ) ?>">
+				<span class="dashicons dashicons-plus"></span>
+			</a>
+		</div>
+	</li>
 </ul>
-
-<div class="cpl_edit_form">
-	<?= \dk\mholt\CustomPageLinks\admin\Metabox::editForm('new') ?>
-	<div class="clear"></div>
-	<?= get_submit_button(__('Add', $textDomain), ['secondary', 'large'], 'cpl_new_link', true, [
-		'data-post_id' => $post->ID
-	]) ?>
-</div>
