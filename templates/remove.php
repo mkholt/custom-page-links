@@ -18,7 +18,7 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 		<?= __('The action <strong>cannot</strong> be undone.') ?>
 	</p>
 	<div class="cpl_footer">
-		<a href="#" id="cpl_delete_confirm" data-post_id="<?= $postId ?>" data-link_id="<?= $link->getId() ?>">
+		<a href="#" id="cpl_delete_confirm" class="cpl_delete" data-post_id="<?= $postId ?>" data-link_id="<?= $link->getId() ?>">
 			<?= __( 'Delete', $textDomain ) ?>
 		</a>
 		<?= get_submit_button(__('Cancel', $textDomain), 'secondary', 'cpl_modal_cancel', false) ?>

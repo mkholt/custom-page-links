@@ -90,7 +90,7 @@
 }
 
 /* line 100, ../sass/screen.scss */
-#cpl_delete_confirm {
+a.cpl_delete {
   color: #a00;
   text-decoration: none;
 }
