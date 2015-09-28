@@ -1,7 +1,7 @@
 === Custom Page Links ===
 Contributors: mkholt
 Donate link: https://github.com/mkholt/custom-page-links
-Tags: links
+Tags: links, shortcode, page
 Requires at least: 4.1.1
 Tested up to: 4.2.5
 Stable tag: 1.0
