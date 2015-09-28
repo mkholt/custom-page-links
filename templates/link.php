@@ -15,21 +15,21 @@ $args = [
 ];
 $href = add_query_arg( $args, $adminUrl );
 ?>
-<div class="cpl-link" data-link_id="<?= $link->getId() ?>">
+<div class="cpl-link" data-link_id="<?php echo $link->getId() ?>">
 	<span class="cpl-media">
 		<?php
 		$mediaUrl = $link->getMediaUrl();
 		if (!empty($mediaUrl)) {
 			?>
-			<img src="<?= $mediaUrl ?>" alt="" />
+			<img src="<?php echo $mediaUrl ?>" alt="" />
 		<?php
 		}
 		?>
 	</span>
 	<a
-		href="<?= esc_url( $href ) ?>"
-		title="<?= $link->getTitle( true ) ?>"
-		target="<?= $link->getTarget() ?>">
-		<?= $link->getTitle( true ) ?>
+		href="<?php echo esc_url( $href ) ?>"
+		title="<?php echo $link->getTitle( true ) ?>"
+		target="<?php echo $link->getTarget() ?>">
+		<?php echo $link->getTitle( true ) ?>
 	</a>
 </div>
