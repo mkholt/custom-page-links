@@ -30,3 +30,20 @@ The editor allows easy linking to other pages / posts on the WordPress installat
 
 Use the ShortCode `[cpl]` wherever you want the list of links.
 Note that the link will be wrapped in a *div*, with the class `cpl-link`.
+
+## Changelog
+
+### 1.0.1
+* Updated to adhere to WordPress style guide for plugins.
+  Removed usage of PHP short tags, including `<?=` shorthand.
+
+### 1.0
+* Initial version. Supports adding / editing / removing links.
+
+## Upgrade Notice
+
+### 1.0.1
+* Adheres to the WordPress requirements for Plugins. No functional changes are done.
+
+### 1.0
+* Initial version.
