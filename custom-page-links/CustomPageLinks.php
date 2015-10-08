@@ -24,10 +24,7 @@ class CustomPageLinks
 	}
 
 	public static function initialize() {
-		if (is_admin()) {
-			Metabox::init();
-		}
-
+		Metabox::init();
 		Shortcode::addShortcode();
 		Landing::init();
 	}

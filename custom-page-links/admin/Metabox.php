@@ -20,8 +20,20 @@ class Metabox {
 		self::$className = __NAMESPACE__ . '\Metabox';
 	}
 
+	/**
+	 * Initialize the Metabox.
+	 * Initialization is only done if the user is currently logged into the administration panel.
+	 *
+	 * @return bool true, if Metabox was initialized, false otherwise.
+	 */
 	public static function init() {
+		if (!is_admin()) {
+			return false;
+		}
+
 		self::addAction();
+
+		return true;
 	}
 
 	public static function addAction() {
