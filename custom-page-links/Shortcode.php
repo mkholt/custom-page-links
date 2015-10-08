@@ -8,6 +8,7 @@
 
 namespace dk\mholt\CustomPageLinks;
 
+use dk\mholt\CustomPageLinks\model\LinkContainer;
 
 class Shortcode {
 	public static function init() {
@@ -18,7 +19,7 @@ class Shortcode {
 	}
 
 	public static function printLinks() {
-		$links = Storage::getLinks(get_the_ID());
+		$links = LinkContainer::all(get_the_ID());
 
 		$ret = "";
 		foreach ($links as $link)

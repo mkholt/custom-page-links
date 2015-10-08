@@ -9,6 +9,8 @@
 namespace dk\mholt\CustomPageLinks;
 
 
+use dk\mholt\CustomPageLinks\model\LinkContainer;
+
 class Landing {
 	const LANDING_ACTION = 'cpl_visit_link';
 
@@ -24,7 +26,7 @@ class Landing {
 	}
 
 	public static function visitLink() {
-		$link = Storage::getLink($_REQUEST['post'], $_REQUEST['link']);
+		$link = LinkContainer::get($_REQUEST['post'], $_REQUEST['link']);
 
 		header('HTTP/1.1 '.HttpStatus::HttpTemporaryRedirect);
 		header(sprintf('Location: %s', $link->getUrl()));

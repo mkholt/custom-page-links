@@ -10,7 +10,7 @@ namespace dk\mholt\CustomPageLinks\admin;
 
 use dk\mholt\CustomPageLinks\CustomPageLinks;
 use dk\mholt\CustomPageLinks\model\Link;
-use dk\mholt\CustomPageLinks\Storage;
+use dk\mholt\CustomPageLinks\model\LinkContainer;
 use dk\mholt\CustomPageLinks\ViewController;
 
 class Metabox {
@@ -89,7 +89,7 @@ class Metabox {
 		ViewController::loadView( 'metabox',
 		[
 			'post'       => $post,
-			'meta'       => Storage::getLinks( $post->ID ),
+			'meta'       => LinkContainer::all( $post->ID ),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		] );
 	}
@@ -124,15 +124,16 @@ class Metabox {
 
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
+		$link = LinkContainer::get( $postId, $linkId );
 
 		if ( ! empty( $_REQUEST['confirm'] ) ) {
-			ViewController::sendJson( [ "status" => Storage::removeLink( $postId, $linkId ) ] );
+			ViewController::sendJson( [ "status" => $link->removeFromPost( $postId ) ] );
 		}
 
 		ViewController::loadView( 'remove',
 		[
 			'postId'     => $postId,
-			'link'       => Storage::getLink( $postId, $linkId ),
+			'link'       => LinkContainer::get( $postId, $linkId ),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		] );
 		wp_die();
@@ -147,7 +148,7 @@ class Metabox {
 		ViewController::loadView( 'edit',
 		[
 			'postId'     => $postId,
-			'link'       => ($postId != null && $linkId != null) ? Storage::getLink( $postId, $linkId ) : null,
+			'link'       => ($postId != null && $linkId != null) ? LinkContainer::get( $postId, $linkId ) : null,
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		] );
 
@@ -161,7 +162,7 @@ class Metabox {
 
 		if (!empty($_REQUEST['link_id'])) {
 			$linkId = $_REQUEST['link_id'];
-			$link   = Storage::getLink( $postId, $linkId );
+			$link   = LinkContainer::get( $postId, $linkId );
 		}
 		else {
 			$link   = new Link();
@@ -172,6 +173,6 @@ class Metabox {
 		$link->setMediaUrl( $_REQUEST['media'] );
 		$link->setTarget( $_REQUEST['target'] );
 
-		ViewController::sendJson( [ "status" => Storage::addLink( $postId, $link ), "link" => $link ] );
+		ViewController::sendJson( [ "status" => $link->addToPost( $postId ), "link" => $link ] );
 	}
 } 
