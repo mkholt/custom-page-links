@@ -25,7 +25,7 @@ class CustomPageLinks
 
 	public static function initialize() {
 		Metabox::init();
-		Shortcode::addShortcode();
+		Shortcode::init();
 		Landing::init();
 	}
 
