@@ -33,10 +33,4 @@ defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 require_once('Autoload.php');
 Autoload::register();
-
-if (is_admin()) {
-	CustomPageLinks::initialize();
-}
-
-Shortcode::addShortcode();
-Landing::init();
+CustomPageLinks::initialize();

@@ -19,17 +19,17 @@ class CustomPageLinks
 		self::$PLUGIN_PATH =  plugin_dir_path( __FILE__ );
 	}
 
-	/**
-	 * @return CustomPageLinks
-	 */
-	public static function initialize()
-	{
-		return new CustomPageLinks();
+	private function __construct() {
+
 	}
 
-	private function __construct()
-	{
-		Metabox::init();
+	public static function initialize() {
+		if (is_admin()) {
+			Metabox::init();
+		}
+
+		Shortcode::addShortcode();
+		Landing::init();
 	}
 
 	private static function esc_html_recursive( $data = FALSE ) {
