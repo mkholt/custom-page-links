@@ -11,6 +11,10 @@ namespace dk\mholt\CustomPageLinks\model;
 use dk\mholt\CustomPageLinks\ViewController;
 
 class Link implements \JsonSerializable {
+	/**
+	 * @var int The post ID
+	 */
+	private $postId;
 	private $id;
 	private $url;
 	private $title;
@@ -29,46 +33,23 @@ class Link implements \JsonSerializable {
 		$this->id = uniqid();
 	}
 
-	/**
-	 * Add a link to the given post
-	 *
-	 * @param int $postId
-	 *
-	 * @return int|bool Meta ID if the key didn't exist, true on successful update,
-	 *                  false on failure.
-	 */
-	public function addToPost($postId)
-	{
-		$meta = LinkContainer::all($postId);
-		$meta[$this->getId()] = $this;
-
-		return update_post_meta($postId, LinkContainer::META_TAG, $meta);
-	}
-
-	/**
-	 * Remove the link given by the post and link id
-	 *
-	 * @param int $postId
-	 * @return bool True on successful update,
-	 *              false on failure.
-	 */
-	public function removeFromPost($postId)
-	{
-		$meta = LinkContainer::all($postId);
-
-		if (array_key_exists($this->getId(), $meta))
-		{
-			unset($meta[$this->getId()]);
-
-			return boolval(update_post_meta($postId, LinkContainer::META_TAG, $meta));
-		}
-
-		return false;
-	}
-
 	public function getId()
 	{
 		return $this->id;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getPostId() {
+		return $this->postId;
+	}
+
+	/**
+	 * @param int $postId
+	 */
+	public function setPostId( $postId ) {
+		$this->postId = $postId;
 	}
 
 	public function setTarget($target)

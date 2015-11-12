@@ -10,7 +10,7 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 $adminUrl = admin_url( 'admin-ajax.php' );
 $args = [
 	'action' => dk\mholt\CustomPageLinks\Landing::LANDING_ACTION,
-	'post' => !empty($postId) ? $postId : get_the_ID(),
+	'post' => $link->getPostId(),
 	'link' => $link->getId()
 ];
 $href = add_query_arg( $args, $adminUrl );

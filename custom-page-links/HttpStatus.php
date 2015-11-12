@@ -69,74 +69,95 @@ class HttpStatus {
 	const HttpNotExtended = 510;
 	const HttpNetworkAuthenticationRequire = 511;
 
+	/**
+	 * @var string[]
+	 */
 	private static $status = [
-		self::HttpContinue => "Continue",
-		self::HttpSwitchingProtocols => "Switching Protocols",
-		self::HttpProcessing => "Processing",
-		self::HttpOK => "OK",
-		self::HttpCreated => "Created",
-		self::HttpAccepted => "Accepted",
-		self::HttpNonAuthoritativeInformation => "Non-Authoritative Information",
-		self::HttpNoContent => "No Content",
-		self::HttpResetContent => "Reset Content",
-		self::HttpPartialContent => "Partial Content",
-		self::HttpMultiStatus => "Multi-Status",
-		self::HttpAlreadyReported => "Already Reported",
-		self::HttpIMUsed => "IM Used",
-		self::HttpMultipleChoices => "Multiple Choices",
-		self::HttpMovedPermanently => "Moved Permanently",
-		self::HttpFound => "Found",
-		self::HttpSeeOther => "See Other",
-		self::HttpNotModified => "Not Modified",
-		self::HttpUseProxy => "Use Proxy",
-		self::HttpTemporaryRedirect => "Temporary Redirect",
-		self::HttpPermanentRedirect => "Permanent Redirect",
-		self::HttpBadRequest => "Bad Request",
-		self::HttpUnauthorized => "Unauthorized",
-		self::HttpPaymentRequired => "Payment Required",
-		self::HttpForbidden => "Forbidden",
-		self::HttpNotFound => "Not Found",
-		self::HttpMethodNotAllowed => "Method Not Allowed",
-		self::HttpNotAcceptable => "Not Acceptable",
-		self::HttpProxyAuthenticationRequired => "Proxy Authentication Required",
-		self::HttpRequestTimeout => "Request Timeout",
-		self::HttpConflict => "Conflict",
-		self::HttpGone => "Gone",
-		self::HttpLengthRequired => "Length Required",
-		self::HttpPreconditionFailed => "Precondition Failed",
-		self::HttpPayloadTooLarge => "Payload Too Large",
-		self::HttpURITooLong => "URI Too Long",
-		self::HttpUnsupportedMediaType => "Unsupported Media Type",
-		self::HttpRangeNotSatisfiable => "Range Not Satisfiable",
-		self::HttpExpectationFailed => "Expectation Failed",
-		self::HttpMisdirectedRequest => "Misdirected Request",
-		self::HttpUnprocessableEntity => "Unprocessable Entity",
-		self::HttpLocked => "Locked",
-		self::HttpFailedDependency => "Failed Dependency",
-		self::HttpUpgradeRequired => "Upgrade Required",
-		self::HttpPreconditionRequired => "Precondition Required",
-		self::HttpTooManyRequests => "Too Many Requests",
-		self::HttpRequestHeaderFieldsTooLarge => "Request Header Fields Too Large",
-		self::HttpInternalServerError => "Internal Server Error",
-		self::HttpNotImplemented => "Not Implemented",
-		self::HttpBadGateway => "Bad Gateway",
-		self::HttpServiceUnavailable => "Service Unavailable",
-		self::HttpGatewayTimeout => "Gateway Timeout",
-		self::HttpHTTPVersionNotSupported => "HTTP Version Not Supported",
-		self::HttpVariantAlsoNegotiates => "Variant Also Negotiates",
-		self::HttpInsufficientStorage => "Insufficient Storage",
-		self::HttpLoopDetected => "Loop Detected",
-		self::HttpNotExtended => "Not Extended",
+		self::HttpContinue                     => "Continue",
+		self::HttpSwitchingProtocols           => "Switching Protocols",
+		self::HttpProcessing                   => "Processing",
+		self::HttpOK                           => "OK",
+		self::HttpCreated                      => "Created",
+		self::HttpAccepted                     => "Accepted",
+		self::HttpNonAuthoritativeInformation  => "Non-Authoritative Information",
+		self::HttpNoContent                    => "No Content",
+		self::HttpResetContent                 => "Reset Content",
+		self::HttpPartialContent               => "Partial Content",
+		self::HttpMultiStatus                  => "Multi-Status",
+		self::HttpAlreadyReported              => "Already Reported",
+		self::HttpIMUsed                       => "IM Used",
+		self::HttpMultipleChoices              => "Multiple Choices",
+		self::HttpMovedPermanently             => "Moved Permanently",
+		self::HttpFound                        => "Found",
+		self::HttpSeeOther                     => "See Other",
+		self::HttpNotModified                  => "Not Modified",
+		self::HttpUseProxy                     => "Use Proxy",
+		self::HttpTemporaryRedirect            => "Temporary Redirect",
+		self::HttpPermanentRedirect            => "Permanent Redirect",
+		self::HttpBadRequest                   => "Bad Request",
+		self::HttpUnauthorized                 => "Unauthorized",
+		self::HttpPaymentRequired              => "Payment Required",
+		self::HttpForbidden                    => "Forbidden",
+		self::HttpNotFound                     => "Not Found",
+		self::HttpMethodNotAllowed             => "Method Not Allowed",
+		self::HttpNotAcceptable                => "Not Acceptable",
+		self::HttpProxyAuthenticationRequired  => "Proxy Authentication Required",
+		self::HttpRequestTimeout               => "Request Timeout",
+		self::HttpConflict                     => "Conflict",
+		self::HttpGone                         => "Gone",
+		self::HttpLengthRequired               => "Length Required",
+		self::HttpPreconditionFailed           => "Precondition Failed",
+		self::HttpPayloadTooLarge              => "Payload Too Large",
+		self::HttpURITooLong                   => "URI Too Long",
+		self::HttpUnsupportedMediaType         => "Unsupported Media Type",
+		self::HttpRangeNotSatisfiable          => "Range Not Satisfiable",
+		self::HttpExpectationFailed            => "Expectation Failed",
+		self::HttpMisdirectedRequest           => "Misdirected Request",
+		self::HttpUnprocessableEntity          => "Unprocessable Entity",
+		self::HttpLocked                       => "Locked",
+		self::HttpFailedDependency             => "Failed Dependency",
+		self::HttpUpgradeRequired              => "Upgrade Required",
+		self::HttpPreconditionRequired         => "Precondition Required",
+		self::HttpTooManyRequests              => "Too Many Requests",
+		self::HttpRequestHeaderFieldsTooLarge  => "Request Header Fields Too Large",
+		self::HttpInternalServerError          => "Internal Server Error",
+		self::HttpNotImplemented               => "Not Implemented",
+		self::HttpBadGateway                   => "Bad Gateway",
+		self::HttpServiceUnavailable           => "Service Unavailable",
+		self::HttpGatewayTimeout               => "Gateway Timeout",
+		self::HttpHTTPVersionNotSupported      => "HTTP Version Not Supported",
+		self::HttpVariantAlsoNegotiates        => "Variant Also Negotiates",
+		self::HttpInsufficientStorage          => "Insufficient Storage",
+		self::HttpLoopDetected                 => "Loop Detected",
+		self::HttpNotExtended                  => "Not Extended",
 		self::HttpNetworkAuthenticationRequire => "Network Authentication Required"
 	];
 
-	public static function getStatus($status)
-	{
-		if (!array_key_exists($status, self::$status))
-		{
-			CustomPageLinks::error("Unexpected status: {$status}");
+	/**
+	 * Get the message of the specified status
+	 *
+	 * @param int $status A valid HTTP status header
+	 *
+	 * @return string
+	 */
+	public static function getStatus( $status ) {
+		if ( ! array_key_exists( $status, self::$status ) ) {
+			CustomPageLinks::error( "Unexpected status: {$status}" );
 		}
 
-		return self::$status[$status];
+		return self::$status[ $status ];
+	}
+
+	/**
+	 * Send the specified status header.
+	 *
+	 * @param int $status A valid HTTP status header
+	 */
+	public static function sendHeader( $status ) {
+		if ( ! array_key_exists( $status, self::$status ) ) {
+			CustomPageLinks::error( "Unexpected status: {$status}" );
+		}
+
+		header( 'HTTP/1.1 ' . $status );
 	}
 }

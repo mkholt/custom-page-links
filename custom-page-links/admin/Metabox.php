@@ -10,7 +10,7 @@ namespace dk\mholt\CustomPageLinks\admin;
 
 use dk\mholt\CustomPageLinks\CustomPageLinks;
 use dk\mholt\CustomPageLinks\model\Link;
-use dk\mholt\CustomPageLinks\model\LinkContainer;
+use dk\mholt\CustomPageLinks\model\Post;
 use dk\mholt\CustomPageLinks\ViewController;
 
 class Metabox {
@@ -83,13 +83,15 @@ class Metabox {
 		]);
 	}
 
-	public static function addMetaBox(\WP_Post $post) {
+	public static function addMetaBox(\WP_Post $wpPost) {
 		add_thickbox();
+
+		$post = Post::createFromPost($wpPost);
 
 		ViewController::loadView( 'metabox',
 		[
-			'post'       => $post,
-			'meta'       => LinkContainer::all( $post->ID ),
+			'post'       => $wpPost,
+			'meta'       => $post->getLinks(),
 			'textDomain' => CustomPageLinks::TEXT_DOMAIN
 		] );
 	}
@@ -124,33 +126,42 @@ class Metabox {
 
 		$postId = $_REQUEST['post_id'];
 		$linkId = $_REQUEST['link_id'];
-		$link = LinkContainer::get( $postId, $linkId );
+
+		$post   = new Post( $postId );
+		$link   = $post->getLink( $linkId );
 
 		if ( ! empty( $_REQUEST['confirm'] ) ) {
-			ViewController::sendJson( [ "status" => $link->removeFromPost( $postId ) ] );
+			ViewController::sendJson( [ "status" => $post->removeLink( $link ) ] );
 		}
 
 		ViewController::loadView( 'remove',
-		[
-			'postId'     => $postId,
-			'link'       => LinkContainer::get( $postId, $linkId ),
-			'textDomain' => CustomPageLinks::TEXT_DOMAIN
-		] );
+			[
+				'postId'     => $postId,
+				'link'       => $link,
+				'textDomain' => CustomPageLinks::TEXT_DOMAIN
+			] );
 		wp_die();
 	}
 
 	public static function editLink() {
 		self::checkAccess();
 
-		$postId = isset($_REQUEST['post_id']) ? $_REQUEST['post_id'] : null;
-		$linkId = isset($_REQUEST['link_id']) ? $_REQUEST['link_id'] : null;
+		$postId = isset( $_REQUEST['post_id'] ) ? $_REQUEST['post_id'] : null;
+		$linkId = isset( $_REQUEST['link_id'] ) ? $_REQUEST['link_id'] : null;
+
+		if ( $postId != null && $linkId != null ) {
+			$post = new Post( $postId );
+			$link = $post->getLink( $linkId );
+		} else {
+			$link = null;
+		}
 
 		ViewController::loadView( 'edit',
-		[
-			'postId'     => $postId,
-			'link'       => ($postId != null && $linkId != null) ? LinkContainer::get( $postId, $linkId ) : null,
-			'textDomain' => CustomPageLinks::TEXT_DOMAIN
-		] );
+			[
+				'postId'     => $postId,
+				'link'       => $link,
+				'textDomain' => CustomPageLinks::TEXT_DOMAIN
+			] );
 
 		wp_die();
 	}
@@ -160,12 +171,19 @@ class Metabox {
 
 		$postId = $_REQUEST['post_id'];
 
-		if (!empty($_REQUEST['link_id'])) {
-			$linkId = $_REQUEST['link_id'];
-			$link   = LinkContainer::get( $postId, $linkId );
+		if ( empty( $postId ) ) {
+			ViewController::sendJson( [ "status" => false ] );
+			wp_die();
 		}
-		else {
-			$link   = new Link();
+
+		$post = new Post( $postId );
+
+		if ( ! empty( $_REQUEST['link_id'] ) ) {
+			$linkId = $_REQUEST['link_id'];
+			$link   = $post->getLink( $linkId );
+		} else {
+			$link = new Link();
+			$link->setPostId( $post->getPostId() );
 		}
 
 		$link->setUrl( $_REQUEST['href'] );
@@ -173,6 +191,6 @@ class Metabox {
 		$link->setMediaUrl( $_REQUEST['media'] );
 		$link->setTarget( $_REQUEST['target'] );
 
-		ViewController::sendJson( [ "status" => $link->addToPost( $postId ), "link" => $link ] );
+		ViewController::sendJson( [ "status" => $post->addLink( $link ), "link" => $link ] );
 	}
 } 

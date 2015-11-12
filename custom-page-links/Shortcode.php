@@ -8,7 +8,7 @@
 
 namespace dk\mholt\CustomPageLinks;
 
-use dk\mholt\CustomPageLinks\model\LinkContainer;
+use dk\mholt\CustomPageLinks\model\Post;
 
 class Shortcode {
 	public static function init() {
@@ -19,11 +19,11 @@ class Shortcode {
 	}
 
 	public static function printLinks() {
-		$links = LinkContainer::all(get_the_ID());
+		$post  = new Post( get_the_ID() );
+		$links = $post->getLinks();
 
 		$ret = "";
-		foreach ($links as $link)
-		{
+		foreach ( $links as $link ) {
 			$ret .= $link->toString();
 		}
 
