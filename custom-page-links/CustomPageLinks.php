@@ -9,10 +9,12 @@
 namespace dk\mholt\CustomPageLinks;
 
 use dk\mholt\CustomPageLinks\admin\Metabox;
+use dk\mholt\CustomPageLinks\model\Post;
 
 class CustomPageLinks
 {
 	const TEXT_DOMAIN = "custom_page_links";
+	const CURRENT_VERSION = "1.1";
 	public static $PLUGIN_PATH;
 
 	public static function __init__() {
@@ -23,7 +25,41 @@ class CustomPageLinks
 
 	}
 
+	protected static function checkVersion() {
+		$options = get_option(self::TEXT_DOMAIN, []);
+
+		$installedVersion = null;
+		if (array_key_exists("version", $options))
+		{
+			$installedVersion = $options["version"];
+		}
+
+		if ($installedVersion != self::CURRENT_VERSION) {
+			if ( empty( $installedVersion ) ) {
+				// Upgrade from 1.0 to 1.1
+				/** @var \WP_Post[] $pages */
+				$pages = get_pages( [
+					"meta_key" => Post::META_TAG
+				] );
+				//$pages = get_pages();
+
+				foreach ( $pages as $page ) {
+					$post = Post::createFromPost( $page );
+					foreach ( $post->getLinks() as $link ) {
+						$link->setPostId( $post->getPostId() );
+						$post->addLink( $link );
+					}
+				}
+			}
+
+			$options["version"] = self::CURRENT_VERSION;
+			update_option(self::TEXT_DOMAIN, $options);
+		}
+	}
+
 	public static function initialize() {
+		self::checkVersion();
+
 		Metabox::init();
 		Shortcode::init();
 		Landing::init();
