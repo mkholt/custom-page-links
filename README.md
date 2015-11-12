@@ -35,8 +35,10 @@ Note that the link will be wrapped in a *div*, with the class `cpl-link`.
 
 ### 1.1
 * Cleaned up the code.
-* Bug fixes:
-** [https://github.com/mkholt/custom-page-links/issues/1](Issue #1)
+
+Bug fixes:
+
+* [Issue #1](https://github.com/mkholt/custom-page-links/issues/1)
 
 ### 1.0.1
 * Updated to adhere to WordPress style guide for plugins.
