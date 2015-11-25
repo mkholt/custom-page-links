@@ -69,7 +69,7 @@ svn rm $SVNPATH/trunk/*
 
 echo "Exporting the HEAD of master from git to the trunk of SVN"
 #git checkout-index -a -f --prefix=$SVNPATH/trunk/
-git archive "v${NEWVERSION1}:${PLUGINSLUG}" | tar -x -C $SVNPATH/trunk/
+git archive "v${NEWVERSION1}:${PLUGINSLUG}/" | tar -x -C $SVNPATH/trunk/
 
 echo "Ignoring github specific files and deployment script"
 svn propset svn:ignore "deploy.sh
@@ -81,7 +81,7 @@ echo "Changing directory to SVN and committing to trunk"
 cd $SVNPATH/trunk/
 # Add all new files that are not set to be ignored
 svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2}' | xargs svn add
-svn commit --username=$SVNUSER -m "$COMMITMSG"
+#svn commit --username=$SVNUSER -m "$COMMITMSG"
 
 echo "Creating new SVN tag & committing it"
 cd $SVNPATH
