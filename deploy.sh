@@ -31,11 +31,12 @@ if ! which svn >/dev/null; then
 fi
 
 # Check version in readme.txt is the same as plugin file after translating both to unix line breaks to work around grep's failure to identify mac line breaks
-NEWVERSION1=`grep "^Stable tag:" $GITPATH/readme.txt | awk -F' ' '{print $NF}'`
+NEWVERSION1=`grep "^Stable tag:" $GITPATH/${PLUGINSLUG}/readme.txt | awk -F' ' '{print $NF}'`
 echo "readme.txt version: $NEWVERSION1"
-NEWVERSION2=`grep "^Version:" $GITPATH/$MAINFILE | awk -F' ' '{print $NF}'`
+NEWVERSION2=`grep "^Version:" $GITPATH/${PLUGINSLUG}/$MAINFILE | awk -F' ' '{print $NF}'`
 echo "$MAINFILE version: $NEWVERSION2"
 
+if [ -z "${NEWVERSION1}" ] || [ -z "${NEWVERSION2}" ]; then echo "Version not found in readme.txt or $MAINFILE. Exiting...."; exit 1; fi
 if [ "$NEWVERSION1" != "$NEWVERSION2" ]; then echo "Version in readme.txt & $MAINFILE don't match. Exiting...."; exit 1; fi
 
 echo "Versions match in readme.txt and $MAINFILE. Let's proceed..."
@@ -53,7 +54,7 @@ echo -e "Enter a commit message for this new version: \c"
 read COMMITMSG
 git commit -am "$COMMITMSG"
 
-echo "Tagging new version in git"
+echo "Tagging new version in git (v${NEWVERSION1})"
 git tag -a "v${NEWVERSION1}" -m "Tagging version $NEWVERSION1"
 
 echo "Pushing latest commit to origin, with tags"
