@@ -1,0 +1,130 @@
+# Copyright (C) 2015 Custom Page Links
+# This file is distributed under the same license as the Custom Page Links package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Page Links 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/custom-page-"
+"links\n"
+"POT-Creation-Date: 2015-11-25 20:17:55+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. #-#-#-#-#  plugin.pot (Custom Page Links 1.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: admin/Metabox.php:44
+msgid "Custom Page Links"
+msgstr ""
+
+#: admin/Metabox.php:66
+msgid "Missing post ID, please try to reload the page."
+msgstr ""
+
+#: admin/Metabox.php:67
+msgid "You must enter a URL"
+msgstr ""
+
+#: admin/Metabox.php:68
+msgid "You must enter a title"
+msgstr ""
+
+#: admin/Metabox.php:69
+msgid "An error occured adding the link"
+msgstr ""
+
+#: admin/Metabox.php:70
+msgid "An error occurred removing the link"
+msgstr ""
+
+#: templates/edit.php:18
+msgid "URL"
+msgstr ""
+
+#: templates/edit.php:20
+msgid "Pick page"
+msgstr ""
+
+#: templates/edit.php:21
+msgid "Pick media"
+msgstr ""
+
+#: templates/edit.php:27
+msgid "Title"
+msgstr ""
+
+#: templates/edit.php:34
+msgid "Target"
+msgstr ""
+
+#: templates/edit.php:50
+msgid "Image"
+msgstr ""
+
+#: templates/edit.php:52
+msgid "Choose image"
+msgstr ""
+
+#: templates/edit.php:57
+msgid "Choose a relevant image, should be no larger than 32x32px"
+msgstr ""
+
+#: templates/edit.php:62
+msgid "Save"
+msgstr ""
+
+#: templates/edit.php:66 templates/remove.php:22
+msgid "Cancel"
+msgstr ""
+
+#: templates/linkActions.php:27
+msgid "Edit link"
+msgstr ""
+
+#: templates/linkActions.php:30
+msgid "Delete link"
+msgstr ""
+
+#: templates/metabox.php:20
+msgid "Existing"
+msgstr ""
+
+#: templates/metabox.php:37
+msgid "No existing links"
+msgstr ""
+
+#: templates/metabox.php:42
+msgid "Add link"
+msgstr ""
+
+#: templates/remove.php:14
+msgid "Are you sure you want to remove the link to <strong>%s</strong>?"
+msgstr ""
+
+#: templates/remove.php:16
+msgid "The action <strong>cannot</strong> be undone."
+msgstr ""
+
+#: templates/remove.php:20
+msgid "Delete"
+msgstr ""
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/mkholt/custom-page-links"
+msgstr ""
+
+#. Description of the plugin/theme
+msgid ""
+"Set a custom list of links on a page or news post. The links can be added as "
+"a widget to a sidebar."
+msgstr ""
+
+#. Author of the plugin/theme
+msgid "morten"
+msgstr ""
+
+#. Author URI of the plugin/theme
+msgid "http://t-hawk.com"
+msgstr ""
