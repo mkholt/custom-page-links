@@ -57,8 +57,16 @@ class CustomPageLinks
 		}
 	}
 
+	protected static function loadTranslation() {
+		add_action( 'plugins_loaded', function() {
+			$plugin_rel_path = plugin_basename( dirname( __FILE__ ) ) . '/languages/';
+			load_plugin_textdomain( self::TEXT_DOMAIN, false, $plugin_rel_path );
+		});
+	}
+
 	public static function initialize() {
 		self::checkVersion();
+		self::loadTranslation();
 
 		Metabox::init();
 		Shortcode::init();
