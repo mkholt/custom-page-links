@@ -113,7 +113,7 @@ msgstr ""
 
 #. Plugin URI of the plugin/theme
 msgid "https://github.com/mkholt/custom-page-links"
-msgstr ""
+msgstr "https://github.com/mkholt/custom-page-links"
 
 #. Description of the plugin/theme
 msgid ""
@@ -123,8 +123,8 @@ msgstr ""
 
 #. Author of the plugin/theme
 msgid "mkholt"
-msgstr "mkholt"
+msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://github.com/mkholt/custom-page-links"
-msgstr "https://github.com/mkholt/custom-page-links"
+msgid "https://github.com/mkholt"
+msgstr ""
