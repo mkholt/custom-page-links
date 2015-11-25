@@ -122,9 +122,9 @@ msgid ""
 msgstr ""
 
 #. Author of the plugin/theme
-msgid "morten"
-msgstr ""
+msgid "mkholt"
+msgstr "mkholt"
 
 #. Author URI of the plugin/theme
-msgid "http://t-hawk.com"
-msgstr ""
+msgid "https://github.com/mkholt/custom-page-links"
+msgstr "https://github.com/mkholt/custom-page-links"
