@@ -54,7 +54,7 @@ read COMMITMSG
 git commit -am "$COMMITMSG"
 
 echo "Tagging new version in git"
-git tag -a "$NEWVERSION1" -m "Tagging version $NEWVERSION1"
+git tag -a "v${NEWVERSION1}" -m "Tagging version $NEWVERSION1"
 
 echo "Pushing latest commit to origin, with tags"
 git push origin master
@@ -68,7 +68,8 @@ echo "Clearing svn repo so we can overwrite it"
 svn rm $SVNPATH/trunk/*
 
 echo "Exporting the HEAD of master from git to the trunk of SVN"
-git checkout-index -a -f --prefix=$SVNPATH/trunk/
+#git checkout-index -a -f --prefix=$SVNPATH/trunk/
+git archive "v${NEWVERSION1}:${PLUGINSLUG}" | tar -x -C $SVNPATH/trunk/
 
 echo "Ignoring github specific files and deployment script"
 svn propset svn:ignore "deploy.sh
@@ -86,7 +87,7 @@ echo "Creating new SVN tag & committing it"
 cd $SVNPATH
 svn copy trunk/ tags/$NEWVERSION1/
 cd $SVNPATH/tags/$NEWVERSION1
-svn commit --username=$SVNUSER -m "Tagging version $NEWVERSION1"
+#svn commit --username=$SVNUSER -m "Tagging version $NEWVERSION1"
 
 echo "Removing temporary directory $SVNPATH"
 rm -fr $SVNPATH/
