@@ -1,0 +1,131 @@
+# Copyright (C) 2015 Custom Page Links
+# This file is distributed under the same license as the Custom Page Links package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Custom Page Links 1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/custom-page-"
+"links\n"
+"POT-Creation-Date: 2015-11-25 20:17:55+00:00\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2015-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#. #-#-#-#-#  plugin.pot (Custom Page Links 1.0)  #-#-#-#-#
+#. Plugin Name of the plugin/theme
+#: admin/Metabox.php:44
+msgid "Custom Page Links"
+msgstr "Custom Page Links"
+
+#: admin/Metabox.php:66
+msgid "Missing post ID, please try to reload the page."
+msgstr "Mangler indlægs ID, prøv at genindlæse siden."
+
+#: admin/Metabox.php:67
+msgid "You must enter a URL"
+msgstr "Du skal indtaste en URL"
+
+#: admin/Metabox.php:68
+msgid "You must enter a title"
+msgstr "Du skal indtaste en titel"
+
+#: admin/Metabox.php:69
+msgid "An error occured adding the link"
+msgstr "Der skete en fejl ved tilføjelsen af linket"
+
+#: admin/Metabox.php:70
+msgid "An error occurred removing the link"
+msgstr "Der skete en fejl ved fjernelsen af linket"
+
+#: templates/edit.php:18
+msgid "URL"
+msgstr "URL"
+
+#: templates/edit.php:20
+msgid "Pick page"
+msgstr "Vælg side"
+
+#: templates/edit.php:21
+msgid "Pick media"
+msgstr "Vælg medie"
+
+#: templates/edit.php:27
+msgid "Title"
+msgstr "Titel"
+
+#: templates/edit.php:34
+msgid "Target"
+msgstr "Mål"
+
+#: templates/edit.php:50
+msgid "Image"
+msgstr "Billede"
+
+#: templates/edit.php:52
+msgid "Choose image"
+msgstr "Vælg billede"
+
+#: templates/edit.php:57
+msgid "Choose a relevant image, should be no larger than 32x32px"
+msgstr "Vælg et relevant billede. Det bør ikke være større end 32x32px"
+
+#: templates/edit.php:62
+msgid "Save"
+msgstr "Gem"
+
+#: templates/edit.php:66 templates/remove.php:22
+msgid "Cancel"
+msgstr "Annuller"
+
+#: templates/linkActions.php:27
+msgid "Edit link"
+msgstr "Rediger link"
+
+#: templates/linkActions.php:30
+msgid "Delete link"
+msgstr "Slet link"
+
+#: templates/metabox.php:20
+msgid "Existing"
+msgstr "Eksisterende"
+
+#: templates/metabox.php:37
+msgid "No existing links"
+msgstr "Ingen eksisterende links"
+
+#: templates/metabox.php:42
+msgid "Add link"
+msgstr "Tilføj link"
+
+#: templates/remove.php:14
+msgid "Are you sure you want to remove the link to <strong>%s</strong>?"
+msgstr "Er du sikker på, at du vil fjerne linket til <strong>%s</strong>?"
+
+#: templates/remove.php:16
+msgid "The action <strong>cannot</strong> be undone."
+msgstr "Handlingen <strong>kan ikke</strong> fortrydes."
+
+#: templates/remove.php:20
+msgid "Delete"
+msgstr "Slet"
+
+#. Plugin URI of the plugin/theme
+msgid "https://github.com/mkholt/custom-page-links"
+msgstr "https://github.com/mkholt/custom-page-links"
+
+#. Description of the plugin/theme
+msgid ""
+"Set a custom list of links on a page or news post. The links can be added as "
+"a widget to a sidebar."
+msgstr "Tilføj en liste af links på en side eller et indlæg. Linkene kan tilføjes som en widget til en sidebar."
+
+#. Author of the plugin/theme
+msgid "mkholt"
+msgstr "mkholt"
+
+#. Author URI of the plugin/theme
+msgid "https://github.com/mkholt"
+msgstr "https://github.com/mkholt"
+
