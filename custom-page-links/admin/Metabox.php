@@ -67,12 +67,18 @@ class Metabox {
 		wp_enqueue_script( 'wp-link' );
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_media();
+
 		wp_enqueue_script( 'cpl-metabox',
 			plugins_url( '../js/metabox.js', __FILE__ ),
-			[ 'jquery' ] );
+			[ 'jquery' ], CustomPageLinks::CURRENT_VERSION, true );
+
 		wp_enqueue_script( 'cpl-link_btn',
 			plugins_url( '../js/link.js', __FILE__ ),
-			[ 'jquery' ], '1.0', true);
+			[ 'jquery' ], CustomPageLinks::CURRENT_VERSION, true );
+
+		wp_enqueue_script( 'cpl-polyfill',
+			plugins_url( '../js/polyfill.js', __FILE__ ),
+			[ 'jquery' ], CustomPageLinks::CURRENT_VERSION, true );
 
 		wp_localize_script( 'cpl-metabox', 'cplMetaboxLang', [
 			'missingPostId'         => __( 'Missing post ID, please try to reload the page.', CustomPageLinks::TEXT_DOMAIN ),
