@@ -15,6 +15,12 @@ $addArgs = [
 ];
 $addLink = add_query_arg($addArgs, $adminUrl);
 
+$sortArgs = [
+	"action"    => "cpl_sort_links",
+	"post_id"   => $post->ID
+];
+$sortLinks = add_query_arg($sortArgs, $adminUrl);
+
 ?>
 <p>
 	<strong><?php _e('Existing', $textDomain) ?></strong>
@@ -39,6 +45,9 @@ $addLink = add_query_arg($addArgs, $adminUrl);
 	<li class="cpl-add-link">
 		<div class="cpl-link"></div>
 		<div class="cpl-link-actions">
+			<a href="<?php echo $sortLinks ?>" class="thickbox" title="<?php _e( 'Sort links', $textDomain ) ?>">
+				<span class="dashicons dashicons-sort"></span>
+			</a>
 			<a href="<?php echo $addLink ?>" class="thickbox" title="<?php _e( 'Add link', $textDomain ) ?>">
 				<span class="dashicons dashicons-plus"></span>
 			</a>

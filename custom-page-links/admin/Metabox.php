@@ -48,6 +48,7 @@ class Metabox {
 		add_action( 'wp_ajax_cpl_edit_link', [ self::$className, 'editLink' ] );
 		add_action( 'wp_ajax_cpl_edit_confirm', [ self::$className, 'updateLink' ] );
 		add_action( 'wp_ajax_cpl_link_actions', [ self::$className, 'getLinkActions' ] );
+		add_action( 'wp_ajax_cpl_sort_links', [ self::$className, 'sortLinks' ] );
 		add_action( 'admin_enqueue_scripts', [ self::$className, 'addScripts' ] );
 	}
 
@@ -85,7 +86,8 @@ class Metabox {
 			'hrefRequired'          => __( 'You must enter a URL', CustomPageLinks::TEXT_DOMAIN ),
 			'titleRequired'         => __( 'You must enter a title', CustomPageLinks::TEXT_DOMAIN ),
 			'errorOccurredAdding'   => __( 'An error occured adding the link', CustomPageLinks::TEXT_DOMAIN ),
-			'errorOccurredRemoving' => __( 'An error occurred removing the link', CustomPageLinks::TEXT_DOMAIN )
+			'errorOccurredRemoving' => __( 'An error occurred removing the link', CustomPageLinks::TEXT_DOMAIN ),
+			'errorOccurredSorting'  => __( 'An error occurred sorting the links', CustomPageLinks::TEXT_DOMAIN )
 		]);
 	}
 
@@ -198,5 +200,34 @@ class Metabox {
 		$link->setTarget( $_REQUEST['target'] );
 
 		ViewController::sendJson( [ "status" => $post->addLink( $link ), "link" => $link ] );
+	}
+
+	public static function sortLinks() {
+		self::checkAccess();
+
+		$post = new Post( $_REQUEST['post_id'] );
+
+		if ( ! empty( $_REQUEST['links'] ) ) {
+			$actions = [];
+			$links = $post->sortLinks($_REQUEST['links']);
+			foreach ($links as $link) {
+				$actions[$link->getId()] = self::linkActions( $post->getPostId(), $link->getId() );
+			}
+
+			ViewController::sendJson([
+				"status" => true,
+				"links" => $links,
+				"actions" => $actions
+			]);
+			wp_die();
+		}
+
+		ViewController::loadView( 'sort',
+			[
+				'post'  => $post,
+				'links' => $post->getLinks()
+			] );
+
+		wp_die();
 	}
 } 

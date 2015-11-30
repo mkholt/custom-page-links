@@ -50,6 +50,33 @@ class Post {
 	}
 
 	/**
+	 * Sort the links associated with the post.
+	 * The $sortOrder parameter is an array containing the IDs
+	 * of the links in sorted order.
+	 *
+	 * Returns the links assosicated with the post
+	 *
+	 * @param string[] $sortOrder
+	 * @return Link[]
+	 */
+	public function sortLinks(array $sortOrder) {
+		$links = $this->getLinks();
+
+		$index = [];
+		foreach ($sortOrder as $idx => $sortKey) {
+			$index[$sortKey] = $idx;
+		}
+
+		uksort($links, function($a, $b) use ($index) {
+			return ($index[$a] < $index[$b]) ? -1 : 1;
+		});
+
+		$this->setLinks($links);
+
+		return $this->getLinks();
+	}
+
+	/**
 	 * Get the links associated with the post
 	 *
 	 * @return Link[]
