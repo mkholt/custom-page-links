@@ -7,27 +7,54 @@
  */
 
 defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController' );
+
+/**
+ * @var dk\mholt\CustomPageLinks\model\Link[] $links
+ * @var dk\mholt\CustomPageLinks\model\Post $post
+ */
+
+/*
+ * wp_enqueue_script('jquery-ui-sortable');
+ * jQuery(".cpl_sort_form .ui-sortable").sortable({items: '.cpl-link', axis: 'y', update: function() { console.log(jQuery(this).sortable('toArray')) }})
+ */
 ?>
 
 <div class="cpl_modal cpl_sort_form">
 	<p>
 		<?php printf(__('To sort the links on the current page, drag-and-drop them below to their new positions. When finished, click the button labelled "%s".', $textDomain), __('Save', $textDomain)); ?>
 	</p>
-	<ul>
-		<?php
-		/**
-		 * @var dk\mholt\CustomPageLinks\model\Link[] $links
-		 * @var dk\mholt\CustomPageLinks\model\Post $post
-		 */
-		foreach ($links as $link) {
+	<div class="widgets-holder-wrap">
+		<div class="ui-sortable">
+			<div class="sidebar-name">
+				<h3><?php _e('Links', $textDomain) ?></h3>
+			</div>
+			<?php
+			foreach ($links as $link) {
+				?>
+				<div id="<?php echo $link->getId() ?>" class="widget cpl-link">
+					<div class="widget-top">
+						<div class="widget-title">
+							<h4>
+								<span class="cpl-media">
+									<?php
+									$mediaUrl = $link->getMediaUrl();
+									if (!empty($mediaUrl)) {
+										?>
+										<img src="<?php echo $mediaUrl ?>" alt="" />
+									<?php
+									}
+									?>
+								</span>
+								<span class="in-widget-title"><?php echo $link->getTitle() ?></span>
+							</h4>
+						</div>
+					</div>
+				</div>
+			<?php
+			}
 			?>
-			<li data-id="<?php echo $link->getId() ?>">
-				<?php echo $link->getTitle() ?>
-			</li>
-		<?php
-		}
-		?>
-	</ul>
+		</div>
+	</div>
 	<div class="cpl_footer">
 		<?php submit_button(__('Save', $textDomain), 'primary', 'cpl_sort_confirm', false, [
 			'data-post_id' => $post->getPostId()
