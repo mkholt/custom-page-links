@@ -1,7 +1,9 @@
-# custom-page-links
+# Custom Page Links
 
 A WordPress plugin to set a custom list of links on a page.
 The links are listed using a ShortCode.
+
+https://wordpress.org/plugins/custom-page-links/
 
 ## Description
 
@@ -19,7 +21,7 @@ The editor allows easy linking to other pages / posts on the WordPress installat
 
 ## Installation
 
-1. Upload the contents of this directory to the `/wp-content/plugins/custom-page-links` directory.
+1. Upload the contents of the directory `custom-page-links` to the `/wp-content/plugins/custom-page-links` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Start adding links through each page.
 4. Wherever you want the list of links, use the ShortCode `[cpl]`
