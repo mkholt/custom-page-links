@@ -60,15 +60,3 @@ Translations added:
 
 ### 1.0
 * Initial version. Supports adding / editing / removing links.
-
-## Upgrade Notice
-
-### 1.1
-* The code. It is cleaner.
-* Bug fixes
-
-### 1.0.1
-* Adheres to the WordPress requirements for Plugins. No functional changes are done.
-
-### 1.0
-* Initial version.
