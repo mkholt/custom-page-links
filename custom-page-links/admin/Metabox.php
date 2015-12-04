@@ -67,28 +67,38 @@ class Metabox {
 
 		wp_enqueue_script( 'wp-link' );
 		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_media();
 
 		wp_enqueue_script( 'cpl-metabox',
 			plugins_url( '../js/metabox.js', __FILE__ ),
-			[ 'jquery' ], CustomPageLinks::CURRENT_VERSION, true );
+			[ 'jquery', 'jquery-ui-sortable' ],
+			CustomPageLinks::CURRENT_VERSION,
+			true );
 
 		wp_enqueue_script( 'cpl-link_btn',
 			plugins_url( '../js/link.js', __FILE__ ),
-			[ 'jquery' ], CustomPageLinks::CURRENT_VERSION, true );
+			[ 'jquery' ],
+			CustomPageLinks::CURRENT_VERSION,
+			true );
 
 		wp_enqueue_script( 'cpl-polyfill',
 			plugins_url( '../js/polyfill.js', __FILE__ ),
-			[ 'jquery' ], CustomPageLinks::CURRENT_VERSION, true );
+			[ 'jquery' ],
+			CustomPageLinks::CURRENT_VERSION,
+			true );
 
-		wp_localize_script( 'cpl-metabox', 'cplMetaboxLang', [
-			'missingPostId'         => __( 'Missing post ID, please try to reload the page.', CustomPageLinks::TEXT_DOMAIN ),
-			'hrefRequired'          => __( 'You must enter a URL', CustomPageLinks::TEXT_DOMAIN ),
-			'titleRequired'         => __( 'You must enter a title', CustomPageLinks::TEXT_DOMAIN ),
-			'errorOccurredAdding'   => __( 'An error occured adding the link', CustomPageLinks::TEXT_DOMAIN ),
-			'errorOccurredRemoving' => __( 'An error occurred removing the link', CustomPageLinks::TEXT_DOMAIN ),
-			'errorOccurredSorting'  => __( 'An error occurred sorting the links', CustomPageLinks::TEXT_DOMAIN )
-		]);
+		wp_localize_script( 'cpl-metabox',
+			'cplMetaboxLang',
+			[
+				'missingPostId'         => __( 'Missing post ID, please try to reload the page.',
+					CustomPageLinks::TEXT_DOMAIN ),
+				'hrefRequired'          => __( 'You must enter a URL', CustomPageLinks::TEXT_DOMAIN ),
+				'titleRequired'         => __( 'You must enter a title', CustomPageLinks::TEXT_DOMAIN ),
+				'errorOccurredAdding'   => __( 'An error occured adding the link', CustomPageLinks::TEXT_DOMAIN ),
+				'errorOccurredRemoving' => __( 'An error occurred removing the link', CustomPageLinks::TEXT_DOMAIN ),
+				'errorOccurredSorting'  => __( 'An error occurred sorting the links', CustomPageLinks::TEXT_DOMAIN )
+			] );
 	}
 
 	public static function addMetaBox(\WP_Post $wpPost) {

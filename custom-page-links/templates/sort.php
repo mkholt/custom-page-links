@@ -12,11 +12,6 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
  * @var dk\mholt\CustomPageLinks\model\Link[] $links
  * @var dk\mholt\CustomPageLinks\model\Post $post
  */
-
-/*
- * wp_enqueue_script('jquery-ui-sortable');
- * jQuery(".cpl_sort_form .ui-sortable").sortable({items: '.cpl-link', axis: 'y', update: function() { console.log(jQuery(this).sortable('toArray')) }})
- */
 ?>
 
 <div class="cpl_modal cpl_sort_form">
@@ -61,4 +56,24 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 		]) ?>
 		<?php submit_button(__('Cancel', $textDomain), 'secondary', 'cpl_modal_cancel', false) ?>
 	</div>
+	<script>
+		(function($) {
+			var setSortOrder = function($form) {
+				var sortOrder = $form.sortable("toArray");
+				cpl_meta.setCurrentSortOrder(sortOrder);
+			};
+
+			var $cplSortForm = $(".cpl_sort_form .ui-sortable");
+			$cplSortForm
+				.sortable({
+					items: '.cpl-link',
+					axis: 'y',
+					update: function() {
+						setSortOrder($(this));
+					}
+				});
+
+			setSortOrder($cplSortForm);
+		})(jQuery);
+	</script>
 </div>

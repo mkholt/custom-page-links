@@ -4,6 +4,20 @@
 var cpl_meta = (function($) {
     'use strict';
 
+    var _currentSortOrder = null;
+
+    function getCurrentSortOrder() {
+        return _currentSortOrder || [];
+    }
+
+    function setCurrentSortOrder(sortOrder) {
+        if (!$.isArray(sortOrder)) {
+            throw Error("Current sort order must be an array");
+        }
+
+        _currentSortOrder = sortOrder;
+    }
+
     function _init() {
         $("body")
             .on('click', '#cpl_edit_confirm', function(e) {
@@ -119,16 +133,10 @@ var cpl_meta = (function($) {
                 e.preventDefault();
 
                 var $btn = $(this),
-                    $wrapper = $btn.closest('.cpl_sort_form'),
-                    $links = $wrapper.find('li'),
-                    links = $links.get().map(function(link) {
-                        return $(link).data('id')
-                    });
-
-                var data = {
+                    data = {
                         action: "cpl_sort_links",
                         post_id: $btn.data('post_id'),
-                        links: links
+                        links: getCurrentSortOrder()
                     };
 
                 $.post(ajaxurl, data, function(returnData) {
@@ -200,7 +208,9 @@ var cpl_meta = (function($) {
     }
 
     return  {
-        init: _init
+        init: _init,
+        setCurrentSortOrder: setCurrentSortOrder,
+        getCurrentSortOrder: getCurrentSortOrder
     };
 })(jQuery);
 
