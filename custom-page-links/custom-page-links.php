@@ -4,7 +4,7 @@
 Plugin Name: Custom Page Links
 Plugin URI: https://github.com/mkholt/custom-page-links
 Description: Set a custom list of links on a page or news post. The links can be added as a widget to a sidebar.
-Version: 1.1
+Version: 1.2
 Author: mkholt
 Author URI: https://github.com/mkholt
 Textdomain: custom-page-links
