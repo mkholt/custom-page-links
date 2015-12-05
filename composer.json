@@ -5,7 +5,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.8.*",
-        "wp-cli/wp-cli": "^0.21.1"
+        "wp-cli/wp-cli": "^0.21.1",
+        "satooshi/php-coveralls": "^0.6.1"
     },
     "license": "GPLv2",
     "authors": [
