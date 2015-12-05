@@ -5,6 +5,8 @@ The links are listed using a ShortCode.
 
 https://wordpress.org/plugins/custom-page-links/
 
+[![Build Status](https://travis-ci.org/mkholt/custom-page-links.svg?branch=master)](https://travis-ci.org/mkholt/custom-page-links) [![Coverage Status](https://coveralls.io/repos/mkholt/custom-page-links/badge.svg?branch=master&service=github)](https://coveralls.io/github/mkholt/custom-page-links?branch=master)
+
 ## Description
 
 The Custom Page Links plugin allows you to specify a list of links to be shown on a specific page.
