@@ -43,11 +43,13 @@ class CustomPageLinks
 				] );
 				//$pages = get_pages();
 
-				foreach ( $pages as $page ) {
-					$post = Post::createFromPost( $page );
-					foreach ( $post->getLinks() as $link ) {
-						$link->setPostId( $post->getPostId() );
-						$post->addLink( $link );
+				if ( ! empty( $pages ) ) {
+					foreach ( $pages as $page ) {
+						$post = Post::createFromPost( $page );
+						foreach ( $post->getLinks() as $link ) {
+							$link->setPostId( $post->getPostId() );
+							$post->addLink( $link );
+						}
 					}
 				}
 			}
