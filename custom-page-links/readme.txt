@@ -55,6 +55,11 @@ Note that the link will be wrapped in a *div*, with the class `cpl-link`.
 = 1.2 =
 * Added ability to sort links by simple drag-and-drop \([Issue #2](https://github.com/mkholt/custom-page-links/issues/2)\)
 
+Bug fixes:
+
+* Fixed a possible issue when first running on an install without any pages defined.
+* Fixed wrong loading place of stylesheets.
+
 = 1.1 =
 * Cleaned up the code.
 * Added support for translation.
