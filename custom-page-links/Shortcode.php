@@ -11,11 +11,26 @@ namespace dk\mholt\CustomPageLinks;
 use dk\mholt\CustomPageLinks\model\Post;
 
 class Shortcode {
+	protected static $className;
+
+	public static function __init__() {
+		self::$className = __NAMESPACE__ . '\Shortcode';
+	}
+
 	public static function init() {
 		add_shortcode( 'cpl', [ __NAMESPACE__ . '\Shortcode', 'printLinks' ] );
 
-		wp_enqueue_style( 'cpl-screen', plugins_url( 'stylesheets/screen.css', __FILE__ ), [], false, 'screen,projection' );
-		wp_enqueue_style( 'cpl-print', plugins_url( 'stylesheets/print.css', __FILE__ ), [], false, 'print' );
+		add_action( 'wp_enqueue_scripts', [ self::$className, 'addStyles' ] );
+		add_action( 'admin_enqueue_scripts', [ self::$className, 'addStyles' ] );
+	}
+
+	public static function addStyles($hook) {
+		wp_enqueue_style( 'cpl-screen',
+			plugins_url( 'stylesheets/screen.css', __FILE__ ),
+			[ ],
+			false,
+			'screen,projection' );
+		wp_enqueue_style( 'cpl-print', plugins_url( 'stylesheets/print.css', __FILE__ ), [ ], false, 'print' );
 	}
 
 	public static function printLinks() {
