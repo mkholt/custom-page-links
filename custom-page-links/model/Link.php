@@ -174,6 +174,7 @@ class Link implements \JsonSerializable {
 	function jsonSerialize() {
 		return [
 			'id'        => $this->getId(),
+			'postId'    => $this->getPostId(),
 			'url'       => $this->getUrl(),
 			'title'     => $this->getTitle(),
 			'mediaUrl'  => $this->getMediaUrl(),
