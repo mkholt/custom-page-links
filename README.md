@@ -1,11 +1,9 @@
-# Custom Page Links
+# Custom Page Links [![Build Status](https://travis-ci.org/mkholt/custom-page-links.svg?branch=master)](https://travis-ci.org/mkholt/custom-page-links) [![codecov.io](https://codecov.io/github/mkholt/custom-page-links/coverage.svg?branch=master)](https://codecov.io/github/mkholt/custom-page-links?branch=master)
 
 A WordPress plugin to set a custom list of links on a page.
 The links are listed using a ShortCode.
 
 https://wordpress.org/plugins/custom-page-links/
-
-[![Build Status](https://travis-ci.org/mkholt/custom-page-links.svg?branch=master)](https://travis-ci.org/mkholt/custom-page-links) [![Coverage Status](https://coveralls.io/repos/mkholt/custom-page-links/badge.svg?branch=master&service=github)](https://coveralls.io/github/mkholt/custom-page-links?branch=master)
 
 ## Description
 
