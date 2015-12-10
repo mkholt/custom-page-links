@@ -64,8 +64,7 @@ class Link implements \JsonSerializable {
 	{
 		$this->target = (self::validTarget($target))
 			? $target
-			: reset(self::$targets)
-		;
+			: reset(self::$targets);
 
 		return $this;
 	}
