@@ -47,11 +47,19 @@ class Link implements \JsonSerializable {
 
 	/**
 	 * @param int $postId
+	 * @return $this
 	 */
 	public function setPostId( $postId ) {
 		$this->postId = $postId;
+
+		return $this;
 	}
 
+	/**
+	 * @param $target
+	 *
+	 * @return $this
+	 */
 	public function setTarget($target)
 	{
 		$this->target = (self::validTarget($target))
@@ -83,9 +91,12 @@ class Link implements \JsonSerializable {
 
 	/**
 	 * @param string $title
+	 * @return $this
 	 */
 	public function setTitle( $title ) {
 		$this->title = $title;
+
+		return $this;
 	}
 
 	/**
@@ -98,7 +109,8 @@ class Link implements \JsonSerializable {
 	/**
 	 * @param string $url
 	 *
-	 * @return Link
+	 * @throws \Exception On invalid URL
+	 * @return $this
 	 */
 	public function setUrl( $url ) {
 		$this->url = esc_url($url);
@@ -114,7 +126,7 @@ class Link implements \JsonSerializable {
 	/**
 	 * @param string $mediaUrl
 	 *
-	 * @return Link
+	 * @return $this
 	 */
 	public function setMediaUrl($mediaUrl)
 	{
@@ -131,11 +143,19 @@ class Link implements \JsonSerializable {
 		return $this->mediaUrl;
 	}
 
+	/**
+	 * @param $target
+	 *
+	 * @return bool
+	 */
 	public static function validTarget($target)
 	{
 		return in_array($target, self::$targets);
 	}
 
+	/**
+	 * @return String[]
+	 */
 	public static function getTargets()
 	{
 		return self::$targets;
@@ -148,6 +168,9 @@ class Link implements \JsonSerializable {
 		return ViewController::loadView('link', ['link' => $this], false);
 	}
 
+	/**
+	 * @return array
+	 */
 	function jsonSerialize() {
 		return [
 			'id'        => $this->getId(),
