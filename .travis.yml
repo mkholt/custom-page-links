@@ -8,6 +8,7 @@ notifications:
 php:
   - 5.5
   - 5.6
+  - 7.0
 
 env:
   - WP_VERSION=latest WP_MULTISITE=0
@@ -18,18 +19,19 @@ matrix:
       env: WP_VERSION=latest WP_MULTISITE=1
     - php: 5.6
       env: WP_VERSION=latest WP_MULTISITE=1
+    - php: 7.0
+      env: WP_VERSION=latest WP_MULTISITE=1
 
-install:
-  - composer install --dev --no-interaction
+before_install:
+  - pip install --user codecov
 
 before_script:
-  - cd custom-page-links
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source --dev
   - bash bin/install-wp-tests.sh wordpress_test root '' localhost $WP_VERSION
 
 script:
-  - mkdir -p build/logs
-  - phpunit
+  - vendor/bin/phpunit
 
-after_script:
-  - cd ../
-  - travis_retry php vendor/bin/coveralls
+after_success:
+  - codecov
