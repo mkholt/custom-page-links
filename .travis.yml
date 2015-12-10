@@ -22,7 +22,6 @@ matrix:
       env: WP_VERSION=latest WP_MULTISITE=1
 
 before_install:
-  - pip install --upgrade pip
   - pip install --user codecov
   - travis_retry composer self-update
   - travis_retry composer install --no-interaction --prefer-source --dev
