@@ -140,6 +140,14 @@ class Post extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
+	 * @expectedException \Exception
+	 */
+	public function testGetNotExistant() {
+		$post = PostModel::createFromPost($this->page);
+		$post->getLink(uniqid());
+	}
+
+	/**
 	 * @param $id
 	 */
 	protected function assertAdded( $id ) {
