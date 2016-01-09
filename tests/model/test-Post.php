@@ -11,28 +11,19 @@ namespace dk\mholt\CustomPageLinks\tests\model;
 use dk\mholt\CustomPageLinks\model\Link as LinkModel;
 use dk\mholt\CustomPageLinks\model\Post as PostModel;
 
-class Post extends \PHPUnit_Framework_TestCase {
+class Post extends \WP_UnitTestCase {
 	/**
 	 * @var \WP_Post
 	 */
 	private $page;
 
 	public function setUp() {
-		global $user_ID;
-
 		// Set up a page for testing
-		$page['post_type']    = 'page';
-		$page['post_content'] = 'Put your page content here';
-		$page['post_parent']  = 0;
-		$page['post_author']  = $user_ID;
-		$page['post_status']  = 'publish';
-		$page['post_title']   = 'Your Page Title';
-		$pageId = wp_insert_post ($page);
+		$this->page = $this->factory->post->create_and_get([
+			"post_type" => "page"
+		]);
 
 		// Make sure it's created
-		$this->assertNotEmpty($pageId);
-
-		$this->page = get_post($pageId);
 		$this->assertNotEmpty($this->page);
 	}
 
