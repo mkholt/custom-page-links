@@ -114,7 +114,8 @@ class Updater extends \WP_UnitTestCase {
 		$this->assertNull($link->getPostId());
 
 		$updater = new BaseUpdater();
-		$updater->handleUpdate(BaseCustomPageLinks::CURRENT_VERSION);
+		$count = $updater->handleUpdate(BaseCustomPageLinks::CURRENT_VERSION);
+		$this->assertEquals(1, $count, "One link should be affected");
 
 		$newPages = get_pages();
 		$this->assertEquals($serialized, serialize($newPages));
@@ -127,7 +128,7 @@ class Updater extends \WP_UnitTestCase {
 		 * @var \dk\mholt\CustomPageLinks\model\Link $link
 		 */
 		$link = reset($links);
-		$this->assertEquals($page->ID, $link->getPostId());
+		$this->assertEquals($page->ID, $link->getPostId(), "The post-id should be updated");
 
 		wp_delete_post($page->ID);
 		unset($this->created[$page->ID]);

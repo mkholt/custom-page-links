@@ -20,8 +20,24 @@ class CustomPageLinks extends \WP_UnitTestCase
 		$updater = $this->getMockBuilder('dk\mholt\CustomPageLinks\Updater')
 			->getMock();
 
-		$updater->method('handleUpdate')
-			->willThrowException(new \Exception("This should not be called"));
+		$updater->expects($this->exactly(0))
+			->method('handleUpdate')
+			->withAnyParameters();
+
+		InnerCustomPageLinks::checkVersion($updater);
+	}
+
+	public function testVersionNotUpdatedUpdaterCalledEmpty()
+	{
+		delete_option(BaseCustomPageLinks::TEXT_DOMAIN);
+
+		$updater = $this->getMockBuilder('dk\mholt\CustomPageLinks\Updater')
+			->getMock();
+
+		$updater->expects($this->exactly(1))
+			->method('handleUpdate')
+			->with($this->equalTo(null))
+			->willReturn(0);
 
 		InnerCustomPageLinks::checkVersion($updater);
 	}
