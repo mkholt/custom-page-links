@@ -17,14 +17,27 @@ class Post extends \WP_UnitTestCase {
 	 */
 	private $page;
 
+	/**
+	 * @var \WP_Post[]
+	 */
+	private $created = [];
+
 	public function setUp() {
 		// Set up a page for testing
 		$this->page = $this->factory->post->create_and_get([
 			"post_type" => "page"
 		]);
 
+		$this->created[] = $this->page;
+
 		// Make sure it's created
 		$this->assertNotEmpty($this->page);
+	}
+
+	public function tearDown() {
+		foreach ($this->created as $page) {
+			wp_delete_post($page->ID);
+		}
 	}
 
 	public function testConstructSetId()

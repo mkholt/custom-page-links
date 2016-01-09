@@ -25,7 +25,7 @@ class CustomPageLinks
 
 	}
 
-	protected static function checkVersion() {
+	protected static function checkVersion(Updater $updater) {
 		$options = get_option(self::TEXT_DOMAIN, []);
 
 		$installedVersion = null;
@@ -35,24 +35,7 @@ class CustomPageLinks
 		}
 
 		if ($installedVersion != self::CURRENT_VERSION) {
-			if ( empty( $installedVersion ) ) {
-				// Upgrade from 1.0 to 1.1
-				/** @var \WP_Post[] $pages */
-				$pages = get_pages( [
-					"meta_key" => Post::META_TAG
-				] );
-				//$pages = get_pages();
-
-				if ( ! empty( $pages ) ) {
-					foreach ( $pages as $page ) {
-						$post = Post::createFromPost( $page );
-						foreach ( $post->getLinks() as $link ) {
-							$link->setPostId( $post->getPostId() );
-							$post->addLink( $link );
-						}
-					}
-				}
-			}
+			$updater->handleUpdate($installedVersion);
 
 			$options["version"] = self::CURRENT_VERSION;
 			update_option(self::TEXT_DOMAIN, $options);
@@ -67,7 +50,7 @@ class CustomPageLinks
 	}
 
 	public static function initialize() {
-		self::checkVersion();
+		self::checkVersion(new Updater());
 		self::loadTranslation();
 
 		Metabox::init();
