@@ -18,6 +18,14 @@ matrix:
       env: WP_VERSION=latest WP_MULTISITE=1
     - php: 5.6
       env: WP_VERSION=latest WP_MULTISITE=1
+    - php: 5.5
+      env: WP_VERSION=4.1.1 WP_MULTISITE=1
+    - php: 5.6
+      env: WP_VERSION=4.1.1 WP_MULTISITE=1
+    - php: 5.5
+      env: WP_VERSION=4.2.6 WP_MULTISITE=1
+    - php: 5.6
+      env: WP_VERSION=4.2.6 WP_MULTISITE=1
 
 before_install:
   - pip install --user codecov
