@@ -114,7 +114,7 @@ class Updater extends \WP_UnitTestCase {
 		$this->assertNull($link->getPostId());
 
 		$updater = new BaseUpdater();
-		$count = $updater->handleUpdate(BaseCustomPageLinks::CURRENT_VERSION);
+		$count = $updater->handleUpdate(null);
 		$this->assertEquals(1, $count, "One link should be affected");
 
 		$newPages = get_pages();
