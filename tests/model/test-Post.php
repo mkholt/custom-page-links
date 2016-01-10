@@ -24,6 +24,11 @@ class Post extends \WP_UnitTestCase {
 
 	public function setUp() {
 		// Set up a page for testing
+		if (is_null($this->factory))
+		{
+			$this->factory = new \WP_UnitTest_Factory;
+		}
+
 		$this->page = $this->factory->post->create_and_get([
 			"post_type" => "page"
 		]);

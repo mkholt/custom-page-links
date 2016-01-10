@@ -26,6 +26,11 @@ class Updater extends \WP_UnitTestCase {
 	 */
 	private function getPage() {
 		// Set up a page for testing
+		if (is_null($this->factory))
+		{
+			$this->factory = new \WP_UnitTest_Factory;
+		}
+
 		$page = $this->factory->post->create_and_get([
 			"post_type" => "page"
 		]);
