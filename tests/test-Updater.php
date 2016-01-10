@@ -105,6 +105,7 @@ class Updater extends \WP_UnitTestCase {
 
 		$post = new \dk\mholt\CustomPageLinks\model\Post($page->ID);
 		$links = $post->getLinks();
+		$serializedLinks = serialize($links);
 		$this->assertNotEmpty($links);
 
 		/**
@@ -134,31 +135,46 @@ class Updater extends \WP_UnitTestCase {
 		unset($this->created[$page->ID]);
 	}
 
-	// TODO : Figure out how to insert link in database WITHOUT the postId field which was added in 1.1
-	/*public function testMatchingOneNoPostId() {
+	public function testMatchingOneNoPostId() {
+		global $wpdb;
+
 		$page = $this->getPage();
 
-		$status = update_post_meta( $page->ID, \dk\mholt\CustomPageLinks\model\Post::META_TAG, 'a:1:{s:13:"5553bb3562b0a";O:35:"dk\mholt\CustomPageLinks\model\Link":5:{s:39:"dk\mholt\CustomPageLinks\model\Linkid";s:13:"5553bb3562b0a";s:40:"dk\mholt\CustomPageLinks\model\Linkurl";s:18:"http://example.com";s:42:"dk\mholt\CustomPageLinks\model\Linktitle";s:11:"Example.com";s:45:"dk\mholt\CustomPageLinks\model\LinkmediaUrl";N;s:43:"dk\mholt\CustomPageLinks\model\Linktarget";s:6:"_blank";}}' );
-		var_dump(unserialize('a:1:{s:13:"5553bb3562b0a";O:35:"dk\mholt\CustomPageLinks\model\Link":5:{s:39:"dk\mholt\CustomPageLinks\model\Linkid";s:13:"5553bb3562b0a";s:40:"dk\mholt\CustomPageLinks\model\Linkurl";s:18:"http://example.com";s:42:"dk\mholt\CustomPageLinks\model\Linktitle";s:11:"Example.com";s:45:"dk\mholt\CustomPageLinks\model\LinkmediaUrl";N;s:43:"dk\mholt\CustomPageLinks\model\Linktarget";s:6:"_blank";}}'));
-		var_dump($page->ID, $status, get_post_meta($page->ID, \dk\mholt\CustomPageLinks\model\Post::META_TAG));
-		exit;
+		$linkId = "5692ab68b7c81";
+		$idLen = strlen($linkId);
+
+		$links = "a:1:{s:${idLen}:\"${linkId}\";O:35:\"dk\\mholt\\CustomPageLinks\\model\\Link\":5:{s:39:\"\0dk\\mholt\\CustomPageLinks\\model\\Link\0id\";s:${idLen}:\"${linkId}\";s:40:\"\0dk\\mholt\\CustomPageLinks\\model\\Link\0url\";s:18:\"http://example.com\";s:42:\"\0dk\\mholt\\CustomPageLinks\\model\\Link\0title\";s:11:\"Example.com\";s:45:\"\0dk\\mholt\\CustomPageLinks\\model\\Link\0mediaUrl\";N;s:43:\"\0dk\\mholt\\CustomPageLinks\\model\\Link\0target\";N;}}";
+
+		$object_id = absint( $page->ID );
+		$meta_type = 'post';
+		$meta_key = \dk\mholt\CustomPageLinks\model\Post::META_TAG;
+		$table = _get_meta_table( $meta_type );
+		$column = sanitize_key( $meta_type . '_id');
+
+		$result = $wpdb->insert( $table, array(
+			$column => $object_id,
+			'meta_key' => $meta_key,
+			'meta_value' => $links
+		) );
+		$this->assertEquals(1, $result, "One row should be inserted");
 
 		$post = new \dk\mholt\CustomPageLinks\model\Post($page->ID);
-		$link = $post->getLink("5553bb3562b0a");
+		$link = $post->getLink($linkId);
 		$this->assertNotNull($link);
 		$this->assertNull($link->getPostId());
 		$this->assertEquals("http://example.com", $link->getUrl());
 
 		$updater = new BaseUpdater();
-		$updater->handleUpdate(BaseCustomPageLinks::CURRENT_VERSION);
+		$updated = $updater->handleUpdate(null);
+		$this->assertEquals(1, $updated, "One link should be updated");
 
 		$post = new \dk\mholt\CustomPageLinks\model\Post($page->ID);
-		$link = $post->getLink("5553bb3562b0a");
+		$link = $post->getLink($linkId);
 		$this->assertNotNull($link);
 		$this->assertEquals($page->ID, $link->getPostId());
 		$this->assertEquals("http://example.com", $link->getUrl());
 		
 		wp_delete_post($page->ID);
 		unset($this->created[$page->ID]);
-	}*/
+	}
 } 
