@@ -58,91 +58,89 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function testEnqueues() {
-		$filename = uniqid();
-		$fd       = new BaseFileDescriptor( $filename );
+		/**
+		 * @var BaseFileDescriptor $fd
+		 */
+		list( $created, $version, $json, $fd ) = $this->getFileWithMetadata( [ "jquery" ] );
 
 		$fd->enqueue();
 		$this->assertTrue( wp_script_is( $fd->getHandle(), 'enqueued' ), "Expected script to be enqueued" );
 	}
 
 	public function testParseMetadata() {
-		$filename = "test.js";
-		$created = date('c');
-		$version = CustomPageLinks::CURRENT_VERSION;
-		$depends = range(0, 10);
-		$json = json_encode($depends);
-		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n * Depends: ${json}\n*/";
+		$depends = range( 0, 10 );
 
-		$root = vfsStream::setup();
-		$file = vfsStream::newFile($filename)
-		                 ->withContent(LargeFileContent::withMegabytes(1))
-		                 ->at($root);
-
-		$fp = fopen($file->url(), 'r+');
-		fwrite($fp, $metadata);
-
-		$fd = new BaseFileDescriptor($filename, $root->url());
+		/**
+		 * @var BaseFileDescriptor $fd
+		 */
+		list( $created, $version, $json, $fd ) = $this->getFileWithMetadata( $depends );
 
 		$meta = $fd->getMeta();
-		$this->assertNotEmpty($meta);
-		$this->assertTrue(is_array($meta));
-		$this->assertEquals(3, count($meta));
-		$this->assertArrayHasKey('created', $meta);
-		$this->assertEquals($created, $meta['created']);
-		$this->assertArrayHasKey('since', $meta);
-		$this->assertEquals($version, $meta['version']);
-		$this->assertArrayHasKey('depends', $meta);
-		$this->assertEquals($json, $meta['depends']);
-		$this->assertEquals($depends, json_decode($meta['depends']));
+		$this->assertNotEmpty( $meta );
+		$this->assertTrue( is_array( $meta ) );
+		$this->assertEquals( 3, count( $meta ) );
+		$this->assertArrayHasKey( 'created', $meta );
+		$this->assertEquals( $created, $meta['created'] );
+		$this->assertArrayHasKey( 'since', $meta );
+		$this->assertEquals( $version, $meta['since'] );
+		$this->assertArrayHasKey( 'depends', $meta );
+		$this->assertEquals( $json, $meta['depends'] );
+		$this->assertEquals( $depends, json_decode( $meta['depends'] ) );
 	}
 
 	public function testDependenciesOne() {
-		$filename = "test.js";
-		$created = date('c');
-		$version = CustomPageLinks::CURRENT_VERSION;
-		$depends = "dependency";
-		$json = json_encode([ $depends ]);
-		$metadata = "/**\n * CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n * Depends: ${json}\n*/";
+		$depends = [ "dependency" ];
 
-		$root = vfsStream::setup();
-		$file = vfsStream::newFile($filename)
-			->withContent(LargeFileContent::withMegabytes(1))
-			->at($root);
-
-		$fp = fopen($file->url(), 'r+');
-		fwrite($fp, $metadata);
-
-		$fd = new BaseFileDescriptor($filename, $root->url());
+		/**
+		 * @var BaseFileDescriptor $fd
+		 */
+		list( $created, $version, $json, $fd ) = $this->getFileWithMetadata( $depends );
 		$dependencies = $fd->getDependencies();
 
-		$this->assertNotEmpty($dependencies, "The file has dependencies");
-		$this->assertTrue(is_array($dependencies), "The dependencies should be an array");
-		$this->assertEquals(1, count($dependencies), "There should be one dependency");
-		$this->assertEquals($depends, $dependencies[0], "The file depends on ${depends}");
+		$this->assertNotEmpty( $dependencies, "The file has dependencies" );
+		$this->assertTrue( is_array( $dependencies ), "The dependencies should be an array" );
+		$this->assertEquals( 1, count( $dependencies ), "There should be one dependency" );
+		$this->assertEquals( $depends, $dependencies, "The file depends on " . json_encode( $depends ) );
 	}
 
 	public function testDependenciesMultiple() {
+		$depends = range( 0, 10 );
+
+		/**
+		 * @var BaseFileDescriptor $fd
+		 */
+		list( $created, $version, $json, $fd ) = $this->getFileWithMetadata( $depends );
+
+		$dependencies = $fd->getDependencies();
+
+		$this->assertNotEmpty( $dependencies, "The file has dependencies" );
+		$this->assertTrue( is_array( $dependencies ), "The dependencies should be an array" );
+		$this->assertEquals( count( $depends ), count( $dependencies ), "There should be one dependency" );
+		$this->assertEquals( $depends, $dependencies, "The file depends on " . json_encode( $depends ) );
+	}
+
+	/**
+	 * @param $depends
+	 *
+	 * @return array
+	 */
+	protected function getFileWithMetadata( $depends ) {
 		$filename = "test.js";
-		$created = date('c');
-		$version = CustomPageLinks::CURRENT_VERSION;
-		$depends = range(0, 10);
-		$json = json_encode($depends);
+		$created  = date( 'c' );
+		$version  = CustomPageLinks::CURRENT_VERSION;
+		$json     = json_encode( $depends );
 		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n * Depends: ${json}\n*/";
 
 		$root = vfsStream::setup();
-		$file = vfsStream::newFile($filename)
-		                 ->withContent(LargeFileContent::withMegabytes(1))
-		                 ->at($root);
+		$file = vfsStream::newFile( $filename )
+		                 ->withContent( LargeFileContent::withMegabytes( 1 ) )
+		                 ->at( $root );
 
-		$fp = fopen($file->url(), 'r+');
-		fwrite($fp, $metadata);
+		$fp = fopen( $file->url(), 'r+' );
+		fwrite( $fp, $metadata );
 
-		$fd = new BaseFileDescriptor($filename, $root->url());
-		$dependencies = $fd->getDependencies();
+		$fd = new BaseFileDescriptor( $filename, $root->url() );
 
-		$this->assertNotEmpty($dependencies, "The file has dependencies");
-		$this->assertTrue(is_array($dependencies), "The dependencies should be an array");
-		$this->assertEquals(count($depends), count($dependencies), "There should be one dependency");
-		$this->assertEquals($depends, $dependencies, "The file depends on ".json_encode($depends));
+		return array( $created, $version, $json, $fd );
 	}
 }

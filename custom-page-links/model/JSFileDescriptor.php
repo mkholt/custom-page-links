@@ -37,7 +37,13 @@ class JSFileDescriptor {
 	}
 
 	public function getDependencies() {
-		return null;
+		$meta = $this->getMeta();
+
+		if ( ! array_key_exists( 'depends', $meta ) ) {
+			return [ ];
+		}
+
+		return json_decode( $meta['depends'] );
 	}
 
 	/**
@@ -92,10 +98,10 @@ class JSFileDescriptor {
 				} elseif ( trim( $line ) == "*/" ) {
 					break;
 				} else {
-					$key   = substr( $line, 0, substr( $line, ':' ) );
+					$key   = substr( $line, 0, strpos( $line, ':' ) );
 					$value = trim( substr( $line, strlen( $key ) + 1 ) );
 
-					$key = trim( $key, " \t\n\r\0\x0B*" );
+					$key = strtolower( trim( $key, " \t\n\r\0\x0B*" ) );
 
 					$this->meta[ $key ] = $value;
 				}
