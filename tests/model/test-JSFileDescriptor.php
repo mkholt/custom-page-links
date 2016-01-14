@@ -25,7 +25,7 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$filename = uniqid();
 		$fd       = new BaseFileDescriptor( $filename );
 		$foundDir = $fd->getBaseDir();
-		$expected = CustomPageLinks::$PLUGIN_PATH;
+		$expected = CustomPageLinks::$PLUGIN_URL;
 
 		$this->assertEquals( $expected, $foundDir, "Expected directory to be retrieved from main class" );
 	}
@@ -148,6 +148,25 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$fd->getDependencies();
 	}
 
+	public function testHeaderCaseInsensitive() {
+		$depends = [ 'jquery' ];
+		list( $json, $metadata ) = $this->getMetadata( $depends, date( 'c' ), CustomPageLinks::CURRENT_VERSION );
+
+		$filename = uniqid() . '.js';
+		$root     = vfsStream::setup();
+		$file     = vfsStream::newFile( $filename )
+		                     ->withContent( strtolower($metadata) )
+		                     ->at( $root );
+
+		$fd = new BaseFileDescriptor( $filename, $root->url() );
+		$dependencies = $fd->getDependencies();
+
+		$this->assertNotEmpty( $dependencies, "The file has dependencies" );
+		$this->assertTrue( is_array( $dependencies ), "The dependencies should be an array" );
+		$this->assertEquals( 1, count( $dependencies ), "There should be one dependency" );
+		$this->assertEquals( $depends, $dependencies, "The file depends on " . json_encode( $depends ) );
+	}
+
 	/**
 	 * @param array $depends
 	 *
@@ -157,12 +176,7 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$filename   = "test.js";
 		$created    = date( 'c' );
 		$version    = CustomPageLinks::CURRENT_VERSION;
-		$dependsStr = "";
-		$json       = json_encode( $depends );
-		if ( null !== $depends ) {
-			$dependsStr = " * Depends: ${json}\n";
-		}
-		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n{$dependsStr}*/";
+		list( $json, $metadata ) = $this->getMetadata( $depends, $created, $version );
 
 		$root = vfsStream::setup();
 		$file = vfsStream::newFile( $filename )
@@ -175,5 +189,23 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$fd = new BaseFileDescriptor( $filename, $root->url() );
 
 		return array( $created, $version, $json, $fd );
+	}
+
+	/**
+	 * @param $depends
+	 * @param $created
+	 * @param $version
+	 *
+	 * @return array
+	 */
+	protected function getMetadata( $depends, $created, $version ) {
+		$dependsStr = "";
+		$json       = json_encode( $depends );
+		if ( null !== $depends ) {
+			$dependsStr = " * Depends: ${json}\n";
+		}
+		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n{$dependsStr}*/";
+
+		return array( $json, $metadata );
 	}
 }
