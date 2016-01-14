@@ -120,7 +120,7 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @param $depends
+	 * @param array $depends
 	 *
 	 * @return array
 	 */
