@@ -1,3 +1,10 @@
+/** CustomPageLinks meta
+ * Author: Dake Sattler
+ * Created: 2015-09-26
+ * Since: 1.1
+ * Depends: [ 'jquery' ]
+ */
+
 /**
  * Script is courtesy of Dake Sattler
  * http://wordpress.stackexchange.com/a/135843

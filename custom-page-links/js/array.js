@@ -1,3 +1,10 @@
+/** CustomPageLinks meta
+ * Author: Morten Holt
+ * Created: 2015-11-30
+ * Since: 1.0
+ * Depends: [ 'jquery' ]
+ */
+
 if (!Array.range)
 {
 	/**

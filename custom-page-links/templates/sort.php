@@ -60,7 +60,7 @@ defined( 'CPL_VIEW' ) or die( 'Please load this view through the ViewController'
 		(function($) {
 			var setSortOrder = function($form) {
 				var sortOrder = $form.sortable("toArray");
-				cpl_meta.setCurrentSortOrder(sortOrder);
+				cpl_sort.setCurrentSortOrder(sortOrder);
 			};
 
 			var $cplSortForm = $(".cpl_sort_form .ui-sortable");

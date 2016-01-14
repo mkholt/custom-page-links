@@ -16,9 +16,11 @@ class CustomPageLinks
 	const TEXT_DOMAIN = "custom_page_links";
 	const CURRENT_VERSION = "1.1";
 	public static $PLUGIN_PATH;
+	public static $PLUGIN_URL;
 
 	public static function __init__() {
-		self::$PLUGIN_PATH =  plugin_dir_path( __FILE__ );
+		self::$PLUGIN_PATH = plugin_dir_path( __FILE__ );
+		self::$PLUGIN_URL  = plugins_url( '', __FILE__ );
 	}
 
 	private function __construct() {

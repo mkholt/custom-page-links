@@ -9,6 +9,7 @@
 namespace dk\mholt\CustomPageLinks\admin;
 
 use dk\mholt\CustomPageLinks\CustomPageLinks;
+use dk\mholt\CustomPageLinks\model\JSFileDescriptor;
 use dk\mholt\CustomPageLinks\model\Link;
 use dk\mholt\CustomPageLinks\model\Post;
 use dk\mholt\CustomPageLinks\ViewController;
@@ -70,23 +71,13 @@ class Metabox {
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_media();
 
-		wp_enqueue_script( 'cpl-metabox',
-			plugins_url( '../js/metabox.js', __FILE__ ),
-			[ 'jquery', 'jquery-ui-sortable' ],
-			CustomPageLinks::CURRENT_VERSION,
-			true );
-
-		wp_enqueue_script( 'cpl-link_btn',
-			plugins_url( '../js/link.js', __FILE__ ),
-			[ 'jquery' ],
-			CustomPageLinks::CURRENT_VERSION,
-			true );
-
-		wp_enqueue_script( 'cpl-polyfill',
-			plugins_url( '../js/polyfill.js', __FILE__ ),
-			[ 'jquery' ],
-			CustomPageLinks::CURRENT_VERSION,
-			true );
+		$jsDir = dirname( __FILE__ ) . '/../js';
+		foreach ( scandir( $jsDir ) as $file ) {
+			if ( "." != substr( $file, 0, 1 ) ) {
+				$fd = new JSFileDescriptor( $file, $jsDir );
+				$fd->enqueue();
+			}
+		}
 
 		wp_localize_script( 'cpl-metabox',
 			'cplMetaboxLang',

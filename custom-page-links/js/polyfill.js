@@ -1,3 +1,10 @@
+/** CustomPageLinks meta
+ * Author: Morten Holt
+ * Created: 2015-11-30
+ * Since: 1.0
+ * Depends: [ 'jquery' ]
+ */
+
 // Implement the array filter function, if missing
 // https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Array/filter#Compatibility
 if (!Array.prototype.filter)

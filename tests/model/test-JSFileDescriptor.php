@@ -25,7 +25,7 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$filename = uniqid();
 		$fd       = new BaseFileDescriptor( $filename );
 		$foundDir = $fd->getBaseDir();
-		$expected = CustomPageLinks::$PLUGIN_URL;
+		$expected = CustomPageLinks::$PLUGIN_PATH;
 
 		$this->assertEquals( $expected, $foundDir, "Expected directory to be retrieved from main class" );
 	}
@@ -49,12 +49,11 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 
 	public function testTranslateSource() {
 		$filename = uniqid();
-		$dir      = uniqid();
-		$fd       = new BaseFileDescriptor( $filename, $dir );
+		$dir      = CustomPageLinks::$PLUGIN_URL;
+		$fd       = new BaseFileDescriptor( $filename, CustomPageLinks::$PLUGIN_PATH );
 
-		$seperator      = DIRECTORY_SEPARATOR;
-		$expectedSource = "${dir}${seperator}${filename}";
-		$this->assertEquals( $expectedSource, $fd->getSourceLocation() );
+		$expectedSource = "${dir}/${filename}";
+		$this->assertEquals( $expectedSource, $fd->getSourcePath() );
 	}
 
 	public function testEnqueues() {
@@ -165,6 +164,11 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue( is_array( $dependencies ), "The dependencies should be an array" );
 		$this->assertEquals( 1, count( $dependencies ), "There should be one dependency" );
 		$this->assertEquals( $depends, $dependencies, "The file depends on " . json_encode( $depends ) );
+	}
+
+	public function testUrlResolves()
+	{
+		$expected = CustomPageLinks::$PLUGIN_URL;
 	}
 
 	/**

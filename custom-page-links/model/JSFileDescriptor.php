@@ -19,6 +19,8 @@ class JSFileDescriptor {
 
 	private $baseDir;
 
+	private $basePath;
+
 	public function __construct( $filename, $baseDir = null ) {
 		$this->filename = $filename;
 		if ( empty( $baseDir ) ) {
@@ -34,6 +36,10 @@ class JSFileDescriptor {
 
 	public function getBaseDir() {
 		return $this->baseDir;
+	}
+
+	public function getBasePath() {
+		return $this->basePath;
 	}
 
 	public function getDependencies() {
@@ -61,13 +67,13 @@ class JSFileDescriptor {
 		return $this->handle;
 	}
 
-	public function getSourceLocation() {
-		return $this->getBaseDir() . DIRECTORY_SEPARATOR . $this->getFilename();
+	public function getSourcePath() {
+		return sprintf("%s/%s", $this->getBasePath(), $this->getFilename());
 	}
 
 	public function enqueue() {
 		wp_enqueue_script( $this->getHandle(),
-			$this->getSourceLocation(),
+			$this->getSourcePath(),
 			$this->getDependencies(),
 			CustomPageLinks::CURRENT_VERSION,
 			true );
@@ -80,9 +86,9 @@ class JSFileDescriptor {
 
 	public function getMeta() {
 		if ( empty( $meta ) ) {
-			$fp = fopen( $this->getSourceLocation(), "r" );
+			$fp = fopen( $this->getSourcePath(), "r" );
 			if ( ! $fp ) {
-				$sourceLocation = $this->getSourceLocation();
+				$sourceLocation = $this->getSourcePath();
 				throw new \Exception( "Error reading file: ${sourceLocation}" );
 			}
 
@@ -90,7 +96,7 @@ class JSFileDescriptor {
 			while ( ( $line = fgets( $fp ) ) !== false ) {
 				if ( ! $foundHeader ) {
 					$header = "/** CustomPageLinks Meta";
-					if ( ! $this->startsWith( $line, $header ) ) {
+					if ( ! $this->startsWith( $line, $header, true ) ) {
 						throw new \Exception( "Unexpected line: ${line}, expected opening comment" );
 					}
 
@@ -113,20 +119,23 @@ class JSFileDescriptor {
 		return $this->meta;
 	}
 
-	// http://stackoverflow.com/a/834355
-	private function startsWith( $haystack, $needle ) {
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param bool $caseSensitive
+	 *
+	 * @link http://stackoverflow.com/a/834355
+	 *
+	 * @return bool
+	 */
+	private function startsWith( $haystack, $needle, $caseInsensitive = false ) {
+		if ( $caseInsensitive ) {
+			$haystack = strtolower( $haystack );
+			$needle   = strtolower( $haystack );
+		}
+
 		$length = strlen( $needle );
 
 		return ( substr( $haystack, 0, $length ) === $needle );
-	}
-
-	// http://stackoverflow.com/a/834355
-	private function endsWith( $haystack, $needle ) {
-		$length = strlen( $needle );
-		if ( $length == 0 ) {
-			return true;
-		}
-
-		return ( substr( $haystack, - $length ) === $needle );
 	}
 }
