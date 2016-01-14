@@ -119,17 +119,50 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $depends, $dependencies, "The file depends on " . json_encode( $depends ) );
 	}
 
+	public function testNoDependencies() {
+		/**
+		 * @var BaseFileDescriptor $fd
+		 */
+		list( $created, $version, $json, $fd ) = $this->getFileWithMetadata( null );
+
+		$dependencies = $fd->getDependencies();
+
+		$this->assertEmpty( $dependencies, "The file has no dependencies" );
+		$this->assertTrue( is_array( $dependencies ), "The dependencies should be an array" );
+		$this->assertEquals( 0, count( $dependencies ), "There should be no dependencies" );
+		$this->assertEquals( [], $dependencies, "The file depends on []");
+	}
+
+	/**
+	 * @expectedException \Exception
+	 * @@expectedExceptionMessageRegExp /Unexpected line: (.*), expected opening comment/
+	 */
+	public function testMissingMeta() {
+		$filename = uniqid() . '.js';
+		$root     = vfsStream::setup();
+		$file     = vfsStream::newFile( $filename )
+		                     ->withContent( "var f = { \"Hello\": \"World\" }" )
+		                     ->at( $root );
+
+		$fd = new BaseFileDescriptor( $filename, $root->url() );
+		$fd->getDependencies();
+	}
+
 	/**
 	 * @param array $depends
 	 *
 	 * @return array
 	 */
 	protected function getFileWithMetadata( $depends ) {
-		$filename = "test.js";
-		$created  = date( 'c' );
-		$version  = CustomPageLinks::CURRENT_VERSION;
-		$json     = json_encode( $depends );
-		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n * Depends: ${json}\n*/";
+		$filename   = "test.js";
+		$created    = date( 'c' );
+		$version    = CustomPageLinks::CURRENT_VERSION;
+		$dependsStr = "";
+		$json       = json_encode( $depends );
+		if ( null !== $depends ) {
+			$dependsStr = " * Depends: ${json}\n";
+		}
+		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n{$dependsStr}*/";
 
 		$root = vfsStream::setup();
 		$file = vfsStream::newFile( $filename )
