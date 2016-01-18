@@ -71,12 +71,10 @@ class Metabox {
 		wp_enqueue_script( 'jquery-ui-sortable' );
 		wp_enqueue_media();
 
-		$jsDir = dirname( __FILE__ ) . '/../js';
-		foreach ( scandir( $jsDir ) as $file ) {
-			if ( "." != substr( $file, 0, 1 ) ) {
-				$fd = new JSFileDescriptor( $file, $jsDir );
-				$fd->enqueue();
-			}
+		$jsDir = realpath( dirname( __FILE__ ) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'js' );
+		foreach ( glob($jsDir . DIRECTORY_SEPARATOR . "*.js" ) as $file) {
+			$fd = new JSFileDescriptor( $file );
+			$fd->enqueue();
 		}
 
 		wp_localize_script( 'cpl-metabox',

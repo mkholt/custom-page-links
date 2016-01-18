@@ -12,48 +12,79 @@ use dk\mholt\CustomPageLinks\CustomPageLinks;
 use \dk\mholt\CustomPageLinks\model\JSFileDescriptor as BaseFileDescriptor;
 use org\bovigo\vfs\content\LargeFileContent;
 use org\bovigo\vfs\vfsStream;
+use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamFile;
 
 class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
+	/** @var vfsStreamDirectory */
+	private $root;
+
+	/** @var string */
+	private $filename;
+
+	/** @var string */
+	private $namePart;
+
+	/** @var vfsStreamFile */
+	private $file;
+
+	/** @var string */
+	private $path;
+
+	public function setUp() {
+		$this->root     = vfsStream::setup();
+		$this->namePart = uniqid();
+		$this->filename = $this->namePart . '.js';
+		vfsStream::create([
+			"js" => []
+		]);
+		$subDir = $this->root->getChild("js");
+
+		$this->file     = vfsStream::newFile( $this->filename )->at( $subDir );
+		$this->path     = $this->file->url();
+	}
+
 	public function testSetsFilename() {
-		$filename = uniqid();
-		$fd       = new BaseFileDescriptor( $filename );
+		$fd = new BaseFileDescriptor( $this->path );
 
-		$this->assertEquals( $filename, $fd->getFilename() );
+		$this->assertEquals( $this->path, $fd->getFilename() );
 	}
 
-	public function testExtractsDirectory() {
-		$filename = uniqid();
-		$fd       = new BaseFileDescriptor( $filename );
-		$foundDir = $fd->getBaseDir();
-		$expected = CustomPageLinks::$PLUGIN_PATH;
+	public function testSetsName() {
+		$fd = new BaseFileDescriptor( $this->path );
 
-		$this->assertEquals( $expected, $foundDir, "Expected directory to be retrieved from main class" );
-	}
-
-	public function testAcceptsDirectory() {
-		$filename = uniqid();
-		$dir      = uniqid();
-		$fd       = new BaseFileDescriptor( $filename, $dir );
-		$foundDir = $fd->getBaseDir();
-
-		$this->assertEquals( $dir, $foundDir, "Expected directory to be given in constructor" );
-	}
-
-	public function testParseHandle() {
-		$uniqid   = uniqid();
-		$filename = $uniqid . '.js';
-		$fd       = new BaseFileDescriptor( $filename );
-
-		$this->assertEquals( "cpl-${uniqid}", $fd->getHandle() );
+		$this->assertEquals( $this->namePart, $fd->getName() );
+		$this->assertEquals( '.js', $fd->getExtension() );
 	}
 
 	public function testTranslateSource() {
-		$filename = uniqid();
-		$dir      = CustomPageLinks::$PLUGIN_URL;
-		$fd       = new BaseFileDescriptor( $filename, CustomPageLinks::$PLUGIN_PATH );
+		$mainFile = $this->getMainClassFilename();
+		$dir      = dirname( $mainFile );
 
-		$expectedSource = "${dir}/${filename}";
-		$this->assertEquals( $expectedSource, $fd->getSourcePath() );
+		$fd       = new BaseFileDescriptor( $dir . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $this->filename );
+
+		$expectedSource = plugins_url( 'js' . DIRECTORY_SEPARATOR . $this->file->getName(), $this->getMainClassFilename() );
+		$actualSource   = $fd->getSourcePath();
+
+		$this->assertEquals( $expectedSource, $actualSource );
+	}
+
+	public function testPluginRelative() {
+		$mainFile = $this->getMainClassFilename();
+		$dir      = dirname( $mainFile );
+
+		$fd       = new BaseFileDescriptor( $dir . DIRECTORY_SEPARATOR . 'js' . DIRECTORY_SEPARATOR . $this->filename );
+		$expected = 'js' . DIRECTORY_SEPARATOR . $this->filename;
+		$actual   = $fd->getPluginRelativePath();
+
+		$this->assertEquals( $expected, $actual );
+	}
+
+	public function testParseHandle() {
+		$fd       = new BaseFileDescriptor( $this->path );
+		$filename = $this->namePart;
+
+		$this->assertEquals( "cpl-${filename}", $fd->getHandle() );
 	}
 
 	public function testEnqueues() {
@@ -137,13 +168,9 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 	 * @@expectedExceptionMessageRegExp /Unexpected line: (.*), expected opening comment/
 	 */
 	public function testMissingMeta() {
-		$filename = uniqid() . '.js';
-		$root     = vfsStream::setup();
-		$file     = vfsStream::newFile( $filename )
-		                     ->withContent( "var f = { \"Hello\": \"World\" }" )
-		                     ->at( $root );
+		$this->file->withContent( "var f = { \"Hello\": \"World\" }" );
 
-		$fd = new BaseFileDescriptor( $filename, $root->url() );
+		$fd = new BaseFileDescriptor( $this->path );
 		$fd->getDependencies();
 	}
 
@@ -157,7 +184,7 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		                     ->withContent( strtolower($metadata) )
 		                     ->at( $root );
 
-		$fd = new BaseFileDescriptor( $filename, $root->url() );
+		$fd = new BaseFileDescriptor( $file->url(), $root->url() );
 		$dependencies = $fd->getDependencies();
 
 		$this->assertNotEmpty( $dependencies, "The file has dependencies" );
@@ -166,31 +193,22 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( $depends, $dependencies, "The file depends on " . json_encode( $depends ) );
 	}
 
-	public function testUrlResolves()
-	{
-		$expected = CustomPageLinks::$PLUGIN_URL;
-	}
-
 	/**
 	 * @param array $depends
 	 *
 	 * @return array
 	 */
 	protected function getFileWithMetadata( $depends ) {
-		$filename   = "test.js";
-		$created    = date( 'c' );
-		$version    = CustomPageLinks::CURRENT_VERSION;
+		$created = date( 'c' );
+		$version = CustomPageLinks::CURRENT_VERSION;
 		list( $json, $metadata ) = $this->getMetadata( $depends, $created, $version );
 
-		$root = vfsStream::setup();
-		$file = vfsStream::newFile( $filename )
-		                 ->withContent( LargeFileContent::withMegabytes( 1 ) )
-		                 ->at( $root );
+		$this->file->withContent( LargeFileContent::withMegabytes( 1 ) );
 
-		$fp = fopen( $file->url(), 'r+' );
+		$fp = fopen( $this->path, 'r+' );
 		fwrite( $fp, $metadata );
 
-		$fd = new BaseFileDescriptor( $filename, $root->url() );
+		$fd = new BaseFileDescriptor( $this->path );
 
 		return array( $created, $version, $json, $fd );
 	}
@@ -211,5 +229,15 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$metadata = "/** CustomPageLinks Meta\n * Created: ${created}\n * Since: ${version}\n{$dependsStr}*/";
 
 		return array( $json, $metadata );
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function getMainClassFilename() {
+		$reflector      = new \ReflectionClass( 'dk\mholt\CustomPageLinks\CustomPageLinks' );
+		$pluginFilename = $reflector->getFileName();
+
+		return $pluginFilename;
 	}
 }

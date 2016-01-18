@@ -131,4 +131,24 @@ class CustomPageLinks
 		wp_die( $error );
 		exit();
 	}
+
+	/**
+	 * @param string $haystack
+	 * @param string $needle
+	 * @param bool $caseInsensitive
+	 *
+	 * @link http://stackoverflow.com/a/834355
+	 *
+	 * @return bool
+	 */
+	public static function startsWith( $haystack, $needle, $caseInsensitive = false ) {
+		if ( $caseInsensitive ) {
+			$haystack = strtolower( $haystack );
+			$needle   = strtolower( $needle );
+		}
+
+		$length = strlen( $needle );
+
+		return ( substr( $haystack, 0, $length ) === $needle );
+	}
 }

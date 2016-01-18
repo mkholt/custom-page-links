@@ -57,6 +57,31 @@ class CustomPageLinks extends \WP_UnitTestCase
 		$this->assertArrayHasKey('version', $option);
 		$this->assertEquals(BaseCustomPageLinks::CURRENT_VERSION, $option['version']);
 	}
+
+	public function testStartsWith()
+	{
+		$this->assertTrue(BaseCustomPageLinks::startsWith("abcdef", "ab"));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "AB"));
+		$this->assertTrue(BaseCustomPageLinks::startsWith("abcdef", "AB", true));
+
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "cd"));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "cd", true));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "CD", true));
+
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "ef"));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "ef", true));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("abcdef", "EF", true));
+
+		$this->assertTrue(BaseCustomPageLinks::startsWith("abcdef", ""));
+		$this->assertTrue(BaseCustomPageLinks::startsWith("abcdef", "", true));
+
+		$this->assertFalse(BaseCustomPageLinks::startsWith("", "abcdef"));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("", "abcdef", true));
+		$this->assertFalse(BaseCustomPageLinks::startsWith("", "ABCDEF", true));
+
+		$this->assertFalse(BaseCustomPageLinks::startsWith("ABCDEF", "ab"));
+		$this->assertTrue(BaseCustomPageLinks::startsWith("ABCDEF", "ab", true));
+	}
 }
 
 class InnerCustomPageLinks extends BaseCustomPageLinks

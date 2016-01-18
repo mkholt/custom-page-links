@@ -17,29 +17,47 @@ class JSFileDescriptor {
 	 */
 	private $filename;
 
-	private $baseDir;
+	/**
+    * @var string
+    */
+	private $pluginRelativePath;
 
-	private $basePath;
+	/**
+	 * @var string
+	 */
+	private $name;
 
-	public function __construct( $filename, $baseDir = null ) {
-		$this->filename = $filename;
-		if ( empty( $baseDir ) ) {
-			$baseDir = CustomPageLinks::$PLUGIN_PATH;
-		}
+	/**
+	 * @var string
+	 */
+	private $extension;
 
-		$this->baseDir = $baseDir;
+	public function __construct( $filename ) {
+		$this->filename  = $filename;
+		$fullLength      = strlen( $filename );
+		$lastSlash       = strrpos( $filename, DIRECTORY_SEPARATOR );
+		$lastDot         = strrpos( $filename, '.' );
+		$this->extension = substr( $filename, $lastDot );
+		$extensionLength = strlen( $this->extension );
+		$startPosition   = $lastSlash + 1;
+		$this->name      = substr( $filename, $startPosition, $fullLength - ( $startPosition + $extensionLength ) );
+
+		$pluginPath               = CustomPageLinks::$PLUGIN_PATH;
+		$dirPath                  = plugin_dir_path( $this->filename );
+		$filePath                 = $dirPath . DIRECTORY_SEPARATOR . $this->name . $this->extension;
+		$this->pluginRelativePath = wp_normalize_path( str_replace( $pluginPath, "", $filePath ) );
 	}
 
 	public function getFilename() {
 		return $this->filename;
 	}
 
-	public function getBaseDir() {
-		return $this->baseDir;
+	public function getName() {
+		return $this->name;
 	}
 
-	public function getBasePath() {
-		return $this->basePath;
+	public function getExtension() {
+		return $this->extension;
 	}
 
 	public function getDependencies() {
@@ -59,16 +77,22 @@ class JSFileDescriptor {
 
 	public function getHandle() {
 		if ( empty( $this->handle ) ) {
-			$filename     = $this->getFilename();
-			$name         = substr( $filename, 0, strpos( $filename, '.' ) );
+			$name         = $this->name;
 			$this->handle = "cpl-${name}";
 		}
 
 		return $this->handle;
 	}
 
+	public function getPluginRelativePath() {
+		return $this->pluginRelativePath;
+	}
+
 	public function getSourcePath() {
-		return sprintf("%s/%s", $this->getBasePath(), $this->getFilename());
+		$path   = $this->getPluginRelativePath();
+		$plugin = CustomPageLinks::$PLUGIN_PATH . DIRECTORY_SEPARATOR . "custom-page-links.php";
+
+		return plugins_url( $path, $plugin );
 	}
 
 	public function enqueue() {
@@ -86,17 +110,17 @@ class JSFileDescriptor {
 
 	public function getMeta() {
 		if ( empty( $meta ) ) {
-			$fp = fopen( $this->getSourcePath(), "r" );
+			$filename = $this->getFilename();
+			$fp = @fopen( $filename, "r" );
 			if ( ! $fp ) {
-				$sourceLocation = $this->getSourcePath();
-				throw new \Exception( "Error reading file: ${sourceLocation}" );
+				throw new \Exception( "Error reading file: ${filename}" );
 			}
 
 			$foundHeader = false;
 			while ( ( $line = fgets( $fp ) ) !== false ) {
 				if ( ! $foundHeader ) {
 					$header = "/** CustomPageLinks Meta";
-					if ( ! $this->startsWith( $line, $header, true ) ) {
+					if ( ! CustomPageLinks::startsWith( $line, $header, true ) ) {
 						throw new \Exception( "Unexpected line: ${line}, expected opening comment" );
 					}
 
@@ -117,25 +141,5 @@ class JSFileDescriptor {
 		}
 
 		return $this->meta;
-	}
-
-	/**
-	 * @param string $haystack
-	 * @param string $needle
-	 * @param bool $caseSensitive
-	 *
-	 * @link http://stackoverflow.com/a/834355
-	 *
-	 * @return bool
-	 */
-	private function startsWith( $haystack, $needle, $caseInsensitive = false ) {
-		if ( $caseInsensitive ) {
-			$haystack = strtolower( $haystack );
-			$needle   = strtolower( $haystack );
-		}
-
-		$length = strlen( $needle );
-
-		return ( substr( $haystack, 0, $length ) === $needle );
 	}
 }
