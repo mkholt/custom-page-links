@@ -87,6 +87,15 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals( "cpl-${filename}", $fd->getHandle() );
 	}
 
+	/**
+	 * @expectedException \Exception
+	 * @expectedExceptionMessage Error reading file: /this/path/is/wrong
+	 */
+	public function testFileNotFound() {
+		$fd = new BaseFileDescriptor( "/this/path/is/wrong" );
+		$fd->getDependencies();
+	}
+
 	public function testEnqueues() {
 		/**
 		 * @var BaseFileDescriptor $fd
@@ -165,7 +174,7 @@ class JSFileDescriptor extends \PHPUnit_Framework_TestCase {
 
 	/**
 	 * @expectedException \Exception
-	 * @@expectedExceptionMessageRegExp /Unexpected line: (.*), expected opening comment/
+	 * @expectedExceptionMessageRegExp /Unexpected line: (.*), expected opening comment/
 	 */
 	public function testMissingMeta() {
 		$this->file->withContent( "var f = { \"Hello\": \"World\" }" );
