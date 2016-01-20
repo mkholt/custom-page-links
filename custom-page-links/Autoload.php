@@ -11,12 +11,33 @@ namespace dk\mholt\CustomPageLinks;
 class Autoload {
 	protected $pluginPath;
 
+	/** @var Autoload */
+	protected static $instance;
+
 	public static function register() {
-		$autoloader = new Autoload();
-		spl_autoload_register([$autoloader, 'load']);
+		if (null == self::$instance)
+		{
+			self::$instance = new Autoload();
+			spl_autoload_register([self::$instance, 'load']);
+		}
 	}
 
-	private function __construct()
+	/**
+	 * @return bool
+	 */
+	public static function unregister() {
+		if (null == self::$instance)
+		{
+			return false;
+		}
+
+		$status = spl_autoload_unregister([self::$instance, 'load']);
+		self::$instance = null;
+
+		return $status;
+	}
+
+	protected function __construct()
 	{
 		$this->pluginPath = plugin_dir_path( __FILE__ );
 	}
@@ -24,12 +45,14 @@ class Autoload {
 	public function load($cls)
 	{
 		$cls = ltrim($cls, '\\');
-		if(strpos($cls, __NAMESPACE__) !== 0)
+		if(strpos($cls, __NAMESPACE__) !== 0) {
 			return;
+		}
 
 		$filename = str_replace(__NAMESPACE__, '', $cls);
 		$filename = ltrim(str_replace('\\', DIRECTORY_SEPARATOR, $filename), '/');
-		$path = sprintf("%s%s.php", $this->pluginPath, $filename);
+		$separator = substr($filename, 0, 1) == DIRECTORY_SEPARATOR ? "" : DIRECTORY_SEPARATOR;
+		$path = sprintf("%s%s%s.php", $this->pluginPath, $separator, $filename);
 
 		require_once($path);
 
