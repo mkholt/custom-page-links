@@ -82,6 +82,14 @@ class CustomPageLinks extends \WP_UnitTestCase
 		$this->assertFalse(BaseCustomPageLinks::startsWith("ABCDEF", "ab"));
 		$this->assertTrue(BaseCustomPageLinks::startsWith("ABCDEF", "ab", true));
 	}
+
+	public function testInitializerSetsRelevantInfo()
+	{
+		BaseCustomPageLinks::__init__();
+		$this->assertNotEmpty(BaseCustomPageLinks::$PLUGIN_PATH);
+		$this->assertNotEmpty(BaseCustomPageLinks::$PLUGIN_URL);
+		$this->assertEquals(BaseCustomPageLinks::$PLUGIN_URL, filter_var(BaseCustomPageLinks::$PLUGIN_URL, FILTER_VALIDATE_URL), "Plugin URL should be a valid URL");
+	}
 }
 
 class InnerCustomPageLinks extends BaseCustomPageLinks
