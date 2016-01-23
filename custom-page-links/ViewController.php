@@ -33,7 +33,7 @@ class ViewController {
 			echo $view;
 		}
 
-		return $controller->load();
+		return $view;
 	}
 
 	public static function sendJson($ret, $status = 200)
