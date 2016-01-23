@@ -142,7 +142,7 @@ class HttpStatus {
 	 */
 	public static function getStatus( $status ) {
 		if ( ! array_key_exists( $status, self::$status ) ) {
-			CustomPageLinks::error( "Unexpected status: {$status}" );
+			ViewController::error( "Unexpected status: {$status}" );
 		}
 
 		return self::$status[ $status ];
@@ -155,7 +155,7 @@ class HttpStatus {
 	 */
 	public static function sendHeader( $status ) {
 		if ( ! array_key_exists( $status, self::$status ) ) {
-			CustomPageLinks::error( "Unexpected status: {$status}" );
+			ViewController::error( "Unexpected status: {$status}" );
 		}
 
 		header( 'HTTP/1.1 ' . $status );
