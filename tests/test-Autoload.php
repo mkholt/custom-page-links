@@ -74,22 +74,38 @@ class Autoload extends \PHPUnit_Framework_TestCase {
 		$this->assertTrue(Test::$test);
 	}
 
+	public function testSkipsOtherNamespace()
+	{
+		$parent = $this->createTestFile( "ns" );
+
+		$ial = new InnerAutoload();
+		$ial->load("\\ns\\Test");
+
+		$path = $parent->url() . DIRECTORY_SEPARATOR . 'ns' . DIRECTORY_SEPARATOR . 'Test.php';
+		require_once( $path );
+		$this->assertFalse(\ns\Test::$test);
+	}
+
 	/**
 	 * @return null|vfsStreamDirectory
 	 */
-	protected function createTestFile() {
-		$root      = vfsStream::setup();
-		$namespace = explode( "\\", __NAMESPACE__ );
+	protected function createTestFile($namespace = null) {
+		if ( empty( $namespace ) ) {
+			$namespace = __NAMESPACE__;
+		}
+		$root           = vfsStream::setup();
+		$namespaceSplit = explode( "\\", $namespace );
 		$bottom         = $root;
-		$parent = null;
-		foreach ( $namespace as $dir ) {
+		$parent         = null;
+		foreach ( $namespaceSplit as $dir ) {
 			$bottom->addChild( new vfsStreamDirectory( $dir ) );
 			$parent = $bottom;
 			$bottom = $bottom->getChild( $dir );
 		}
 
+		$content = "<?php\nnamespace " . $namespace . ";\nclass Test { public static \$test = false; public static function __init__() { self::\$test = true; } }";
 		vfsStream::newFile( 'Test.php' )
-		         ->withContent( "<?php\nnamespace " . __NAMESPACE__ . ";\nclass Test { public static \$test = false; public static function __init__() { self::\$test = true; } }" )
+		         ->withContent( $content )
 		         ->at( $bottom );
 
 		return $parent;
