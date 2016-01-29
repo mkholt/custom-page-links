@@ -51,7 +51,7 @@ class ViewController {
 		{
 			// @codeCoverageIgnoreStart
 			self::addJsonHeaders($status);
-			// @@codeCoverageIgnoreEnd
+			// @codeCoverageIgnoreEnd
 		}
 
 		echo json_encode($ret);
